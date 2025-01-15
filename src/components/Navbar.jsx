@@ -41,10 +41,10 @@ export default function Navbar() {
           </div>
         ) : (
           <Link
-            to="/login"
+            to="/auth/login"
             className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary"
           >
-            Login/Register
+            Login
           </Link>
         )}
       </div>
