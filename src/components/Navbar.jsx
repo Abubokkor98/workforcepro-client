@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-  const user = false;
+  const user = false; // Replace with actual user state
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -40,12 +40,20 @@ export default function Navbar() {
             </button>
           </div>
         ) : (
-          <Link
-            to="/auth/login"
-            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary"
-          >
-            Login
-          </Link>
+          <div className="flex gap-4">
+            <Link
+              to="/auth/login"
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary"
+            >
+              Login
+            </Link>
+            <Link
+              to="/auth/register"
+              className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-primary"
+            >
+              Register
+            </Link>
+          </div>
         )}
       </div>
     </nav>
