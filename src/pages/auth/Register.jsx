@@ -5,10 +5,19 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../provider/AuthProvider";
 
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 export default function Register() {
   const { registerUser, setUser, updateUserProfile } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState("Employee");
+  const [file, setFile] = useState(null);
+  const [bankAccountNo, setBankAccountNo] = useState("");
+  const [salary, setSalary] = useState("");
+  const [designation, setDesignation] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = (e) => {
@@ -46,6 +55,11 @@ export default function Register() {
       .catch((error) => {
         setError(error.message);
       });
+  };
+
+  // Handle file input
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   return (
@@ -86,18 +100,99 @@ export default function Register() {
             />
           </div>
 
-          {/* Photo URL */}
+          {/* Photo Upload */}
           <div>
             <label className="block text-sm font-medium text-text mb-2">
-              Photo URL
+              Upload Your Photo
             </label>
             <input
-              type="text"
+              type="file"
               name="photo"
-              placeholder="Enter your photo URL"
+              accept="image/*"
+              onChange={handleFileChange}
               className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
               required
             />
+            {file && (
+              <div className="mt-2">
+                <p className="text-sm text-text">Selected file: {file.name}</p>
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="Preview"
+                  className="w-16 h-16 object-cover rounded-full mt-2"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Role */}
+          <div>
+            <label className="block text-sm font-medium text-text mb-2">
+              Role
+            </label>
+            <select
+              name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text"
+              required
+            >
+              <option value="Employee">Employee</option>
+              <option value="HR">HR</option>
+            </select>
+          </div>
+
+          {/* Bank Account Number */}
+          <div>
+            <label className="block text-sm font-medium text-text mb-2">
+              Bank Account Number
+            </label>
+            <input
+              type="text"
+              name="bank_account_no"
+              value={bankAccountNo}
+              onChange={(e) => setBankAccountNo(e.target.value)}
+              placeholder="Enter your bank account number"
+              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+              required
+            />
+          </div>
+
+          {/* Salary */}
+          <div>
+            <label className="block text-sm font-medium text-text mb-2">
+              Salary
+            </label>
+            <input
+              type="number"
+              name="salary"
+              value={salary}
+              onChange={(e) => setSalary(e.target.value)}
+              placeholder="Enter your salary"
+              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+              required
+            />
+          </div>
+
+          {/* Designation */}
+          <div>
+            <label className="block text-sm font-medium text-text mb-2">
+              Designation
+            </label>
+            <select
+              name="designation"
+              value={designation}
+              onChange={(e) => setDesignation(e.target.value)}
+              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text"
+              required
+            >
+              <option value="Sales Assistant">Sales Assistant</option>
+              <option value="Social Media Executive">
+                Social Media Executive
+              </option>
+              <option value="Digital Marketer">Digital Marketer</option>
+              {/* Add other designations as needed */}
+            </select>
           </div>
 
           {/* Password */}
