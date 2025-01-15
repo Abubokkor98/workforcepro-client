@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
-  const user = false; // Replace with actual user state
+  const { user,logoutUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("User logged out");
-    navigate("/login");
+    logoutUser()
+      .then(() => {
+        setUser(null);
+        toast.error("User Logged out");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -27,7 +35,7 @@ export default function Navbar() {
         {user ? (
           <div className="flex items-center gap-4">
             <img
-              src="https://via.placeholder.com/40"
+              src={user.photoURL}
               alt="User Avatar"
               className="w-10 h-10 rounded-full cursor-pointer"
               onClick={() => console.log("Profile clicked")}

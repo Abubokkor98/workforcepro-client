@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../provider/AuthProvider";
+import GoogleLogin from "../../components/auth/GoogleLogin";
 
 export default function Login() {
   const { loginUser, setUser } = useContext(AuthContext);
@@ -86,12 +87,16 @@ export default function Login() {
         <p className="mt-6 text-center text-gray-600">
           Don't have an account?{" "}
           <Link
-            to={"/register"}
+            to={"/auth/register"}
             className="text-primary font-medium hover:underline"
           >
             Register here
           </Link>
         </p>
+        {/* Google Login */}
+        <div className="mt-8 flex justify-center">
+          <GoogleLogin />
+        </div>
       </div>
     </div>
   );

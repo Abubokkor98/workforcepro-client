@@ -134,7 +134,7 @@ export default function Register() {
         <p className="mt-6 text-center text-secondary">
           Already have an account?{" "}
           <Link
-            to={"/login"}
+            to={"/auth/login"}
             className="text-primary font-medium hover:underline"
           >
             Login here
