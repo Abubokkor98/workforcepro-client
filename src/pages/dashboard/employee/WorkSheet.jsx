@@ -1,34 +1,52 @@
-import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import useAuth from "../../../customHooks/useAuth";
 import useAxiosPublic from "../../../customHooks/useAxiosPublic";
+import useTasks from "../../../customHooks/useTasks";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 export default function WorkSheet() {
   const { register, handleSubmit, control, reset } = useForm();
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
-  const [tasks, setTasks] = useState([]);
+  const axiosSecure = useAxiosSecure();
+  const [tasks, loading, refetch] = useTasks();
 
   const onSubmit = async (data) => {
     const newTask = {
-      employee_name: user.name,
-      employee_email: user.name,
+      employee_name: user.displayName,
+      employee_email: user.email,
       task: data.task,
       hours: data.work_duration,
       date: data.date,
     };
+    console.log(newTask);
     // post task in the db
     const { data: task } = await axiosPublic.post("/tasks", newTask);
     console.log(task);
     if (task.insertedId) {
-      setTasks([...tasks, newTask]);
       reset();
+      refetch();
     }
   };
 
+  const handleDeleteTask =async (task) => {
+    console.log('delete btn clicked');
+    const { data } =await axiosSecure.delete(`/tasks/${task._id}`);
+    console.log(data);
+    if (data.deletedCount > 0) {
+      toast.error("task delete successfully");
+      refetch();
+    }
+  };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Work Sheet</h2>
@@ -112,8 +130,8 @@ export default function WorkSheet() {
                 </button>
 
                 <button
+                  onClick={() => handleDeleteTask(task)}
                   className="text-secondary hover:text-accent"
-                  onClick={() => setTasks(tasks.filter((_, i) => i !== index))}
                 >
                   <FiTrash size={20} />
                 </button>
