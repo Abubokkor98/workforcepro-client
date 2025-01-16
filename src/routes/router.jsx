@@ -5,11 +5,13 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
 import ContactUs from "../pages/contact/ContactUs";
+import DashBoardLayout from "../layouts/DashBoardLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    // home layout
     children: [
       {
         path: "/",
@@ -20,6 +22,10 @@ const router = createBrowserRouter([
         element: <ContactUs></ContactUs>,
       },
     ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashBoardLayout></DashBoardLayout>,
   },
   {
     path: "/auth",

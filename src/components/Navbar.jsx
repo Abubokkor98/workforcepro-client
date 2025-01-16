@@ -18,7 +18,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-background text-text px-4 py-3 flex justify-between items-center shadow-md">
+    <nav className="bg-background sticky top-0 z-50 text-text px-4 py-3 flex justify-between items-center shadow-md">
       <div className="logo">
         <Link to="/" className="text-xl font-bold text-primary">
           WorkForce Pro
@@ -32,20 +32,25 @@ export default function Navbar() {
           Contact Us
         </Link>
         {user ? (
-          <div className="flex items-center gap-4">
-            <img
-              src={user.photoURL}
-              alt="User Avatar"
-              className="w-10 h-10 rounded-full cursor-pointer"
-              onClick={() => console.log("Profile clicked")}
-            />
-            <button
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
+          <>
+            <Link to="/dashboard" className="hover:text-primary">
+              Dashboard
+            </Link>
+            <div className="flex items-center gap-4">
+              <img
+                src={user.photoURL}
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full cursor-pointer"
+                onClick={() => console.log("Profile clicked")}
+              />
+              <button
+                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </>
         ) : (
           <div className="flex gap-4">
             <Link
