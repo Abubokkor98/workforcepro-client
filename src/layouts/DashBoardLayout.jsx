@@ -3,7 +3,7 @@ import useAuth from "../customHooks/useAuth";
 
 export default function DashBoardLayout() {
   const { user } = useAuth();
-  const role = "HR";
+  const role = "Admin";
 
   return (
     <div className="flex min-h-screen bg-background text-text">
@@ -66,7 +66,7 @@ export default function DashBoardLayout() {
           {role === "Admin" && (
             <>
               <NavLink
-                to="all-employee-list"
+                to="all-employees"
                 className={({ isActive }) =>
                   `block py-2 px-4 rounded ${
                     isActive ? "bg-secondary" : "hover:bg-secondary"
