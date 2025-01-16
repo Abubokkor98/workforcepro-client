@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
-import { AuthContext } from "../../provider/AuthProvider";
 import GoogleLogin from "../../components/auth/GoogleLogin";
+import useAuth from "../../customHooks/useAuth";
 
 export default function Login() {
-  const { loginUser, setUser } = useContext(AuthContext);
+  const { loginUser, setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
