@@ -45,6 +45,7 @@ export default function Register() {
         designation: data.designation,
         bank_account_no: parseInt(data.bank_account_no),
         salary: parseInt(data.salary),
+        isVerfied: false,
       };
       console.log(user);
       const userRes = await axiosPublic.post("/users", user);
@@ -130,11 +131,11 @@ export default function Register() {
                 <span className="label-text">Role</span>
               </label>
               <select
-                defaultValue={"default"}
+                defaultValue={""}
                 className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
                 {...register("role", { required: "Role is required" })}
               >
-                <option disabled value={"default"}>
+                <option disabled value={""}>
                   Select a role
                 </option>
                 <option value="Employee">Employee</option>
@@ -153,13 +154,13 @@ export default function Register() {
                 <span className="label-text">Designation</span>
               </label>
               <select
-                defaultValue={"default"}
+                defaultValue={""}
                 className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
                 {...register("designation", {
                   required: "Designation is required",
                 })}
               >
-                <option disabled value={"default"}>
+                <option disabled value={""}>
                   Select your designation
                 </option>
                 <option value="Sales Assistant">Sales Assistant</option>

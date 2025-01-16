@@ -1,4 +1,4 @@
-import { Outlet, NavLink, Navigate } from "react-router-dom";
+import { Outlet, NavLink, Navigate, Link } from "react-router-dom";
 import useAuth from "../customHooks/useAuth";
 
 export default function DashBoardLayout() {
@@ -9,7 +9,9 @@ export default function DashBoardLayout() {
     <div className="flex min-h-screen bg-background text-text">
       {/* Sidebar */}
       <aside className="w-64 bg-primary text-white p-4">
-        <h2 className="text-2xl font-bold mb-6">WorkForce Pro</h2>
+        <Link to={"/"}>
+          <h2 className="text-2xl font-bold mb-6">WorkForce Pro</h2>
+        </Link>
         <nav className="space-y-4">
           {role === "Employee" && (
             <>
