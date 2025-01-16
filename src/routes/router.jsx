@@ -8,6 +8,7 @@ import ContactUs from "../pages/contact/ContactUs";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import WorkSheet from "../pages/dashboard/employee/WorkSheet";
 import PaymentHistory from "../pages/dashboard/employee/PaymentHistory";
+import EmployeeList from "../pages/dashboard/HR/EmployeeList";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
       {
         path: "payment-history",
         element: <PaymentHistory></PaymentHistory>,
+      },
+      // HR
+      {
+        path: "employee-list",
+        element: <EmployeeList></EmployeeList>,
       },
     ],
   },
