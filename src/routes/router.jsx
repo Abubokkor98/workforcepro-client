@@ -7,6 +7,7 @@ import Home from "../pages/home/Home";
 import ContactUs from "../pages/contact/ContactUs";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import WorkSheet from "../pages/dashboard/employee/WorkSheet";
+import PaymentHistory from "../pages/dashboard/employee/PaymentHistory";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "payment-history",
-        element: <h2>payment-history</h2>,
+        element: <PaymentHistory></PaymentHistory>,
       },
     ],
   },
