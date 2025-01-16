@@ -1,220 +1,280 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 import { AuthContext } from "../../provider/AuthProvider";
-
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import useAxiosPublic from "../../customHooks/useAxiosPublic";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
 export default function Register() {
   const { registerUser, setUser, updateUserProfile } = useContext(AuthContext);
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState("Employee");
-  const [file, setFile] = useState(null);
-  const [bankAccountNo, setBankAccountNo] = useState("");
-  const [salary, setSalary] = useState("");
-  const [designation, setDesignation] = useState("");
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    setError("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm();
 
-    const form = new FormData(e.target);
-    const name = form.get("name");
-    const email = form.get("email");
-    const photo = form.get("photo");
-    const password = form.get("password");
+  const [showPassword, setShowPassword] = useState(false);
 
-    if (password.length < 6) {
-      setError("Password must be 6 characters or longer.");
-      return;
+  const onSubmit = async (data) => {
+    console.log(data);
+    // const { name, email, password, photo } = data;
+
+    // upload image to the image bb and get an URL
+    const userImage = { image: data.photo[0] };
+    const res = await axiosPublic.post(image_hosting_api, userImage, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    if (res.data.success) {
+      // send the user data to the server with the image URL
+      const user = {
+        name: data.name,
+        email: data.email,
+        photo: res.data.data.display_url,
+        role: data.role,
+        designation: data.designation,
+        bank_account_no: parseInt(data.bank_account_no),
+        salary: parseInt(data.salary),
+      };
+      console.log(user);
+      const userRes = await axiosPublic.post("/users", user);
+      // console.log(userRes.data);
+      if (userRes.data.insertedId) {
+        registerUser(data.email, data.password)
+          .then((result) => {
+            const user = result.user;
+            setUser(user);
+            toast.success("User registered successfully");
+
+            updateUserProfile({
+              displayName: data.name,
+              photoURL: res.data.data.display_url,
+            })
+              .then(() => {
+                navigate("/");
+                reset();
+              })
+              .catch((error) => {
+                toast.error(error.message);
+              });
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          });
+      }
     }
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).+$/;
-    if (!passwordRegex.test(password)) {
-      setError(
-        "Password must contain at least one uppercase and one lowercase letter."
-      );
-      return;
-    }
-    registerUser(email, password)
-      .then((result) => {
-        const user = result.user;
-        setUser(user);
-        toast.success("User registered successfully");
-        updateUserProfile({
-          displayName: name,
-          photoURL: photo,
-        });
-        navigate("/");
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
-
-  // Handle file input
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className=" bg-background flex items-center justify-center">
       <Helmet>
         <title>Register | WorkForce Pro</title>
       </Helmet>
-      <div className="bg-white p-10 rounded-3xl shadow-xl w-full sm:w-96">
+      <div className="bg-white p-8 rounded-3xl shadow-xl w-full sm:w-[500px]">
         <h2 className="text-3xl font-bold text-center text-primary mb-6">
           Create an Account
         </h2>
-        <form onSubmit={handleRegister} className="space-y-6">
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              required
-            />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Name */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+                {...register("name", { required: "Name is required" })}
+              />
+              {errors.name && (
+                <span className="text-red-500 text-sm mt-2">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+                {...register("email", { required: "Email is required" })}
+              />
+              {errors.email && (
+                <span className="text-red-500 text-sm mt-2">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
           </div>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              required
-            />
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Role */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Role</span>
+              </label>
+              <select
+                defaultValue={"default"}
+                className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+                {...register("role", { required: "Role is required" })}
+              >
+                <option disabled value={"default"}>
+                  Select a role
+                </option>
+                <option value="Employee">Employee</option>
+                <option value="HR">HR</option>
+              </select>
+              {errors.role && (
+                <span className="text-red-500 text-sm mt-2">
+                  {errors.role.message}
+                </span>
+              )}
+            </div>
 
-          {/* Photo Upload */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Upload Your Photo
-            </label>
-            <input
-              type="file"
-              name="photo"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              required
-            />
-            {file && (
-              <div className="mt-2">
-                <p className="text-sm text-text">Selected file: {file.name}</p>
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt="Preview"
-                  className="w-16 h-16 object-cover rounded-full mt-2"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Role */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Role
-            </label>
-            <select
-              name="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text"
-              required
-            >
-              <option value="Employee">Employee</option>
-              <option value="HR">HR</option>
-            </select>
+            {/* Designation */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Designation</span>
+              </label>
+              <select
+                defaultValue={"default"}
+                className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+                {...register("designation", {
+                  required: "Designation is required",
+                })}
+              >
+                <option disabled value={"default"}>
+                  Select your designation
+                </option>
+                <option value="Sales Assistant">Sales Assistant</option>
+                <option value="Social Media Executive">
+                  Social Media Executive
+                </option>
+                <option value="Digital Marketer">Digital Marketer</option>
+              </select>
+              {errors.designation && (
+                <span className="text-red-500 text-sm mt-2">
+                  {errors.designation.message}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Bank Account Number */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Bank Account Number
-            </label>
-            <input
-              type="text"
-              name="bank_account_no"
-              value={bankAccountNo}
-              onChange={(e) => setBankAccountNo(e.target.value)}
-              placeholder="Enter your bank account number"
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              required
-            />
-          </div>
-
-          {/* Salary */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Salary
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Bank Account Number</span>
             </label>
             <input
               type="number"
-              name="salary"
-              value={salary}
-              onChange={(e) => setSalary(e.target.value)}
-              placeholder="Enter your salary"
+              placeholder="Enter your bank account number"
               className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              required
+              {...register("bank_account_no", {
+                required: "Bank Account Number is required",
+              })}
             />
+            {errors.bank_account_no && (
+              <span className="text-red-500 text-sm mt-2">
+                {errors.bank_account_no.message}
+              </span>
+            )}
+          </div>
+          {/* Photo Upload Input */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Upload Your Photo</span>
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text"
+              {...register("photo", {
+                required: "Image upload is required",
+                validate: {
+                  isImage: (files) =>
+                    (files && files[0]?.type.startsWith("image/")) ||
+                    "Only image files are allowed",
+                },
+              })}
+            />
+            {errors.photo && (
+              <span className="text-red-500 text-sm mt-2">
+                {errors.photo.message}
+              </span>
+            )}
           </div>
 
-          {/* Designation */}
-          <div>
-            <label className="block text-sm font-medium text-text mb-2">
-              Designation
+          {/* Salary */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Salary</span>
             </label>
-            <select
-              name="designation"
-              value={designation}
-              onChange={(e) => setDesignation(e.target.value)}
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text"
-              required
-            >
-              <option value="Sales Assistant">Sales Assistant</option>
-              <option value="Social Media Executive">
-                Social Media Executive
-              </option>
-              <option value="Digital Marketer">Digital Marketer</option>
-              {/* Add other designations as needed */}
-            </select>
+            <input
+              type="number"
+              placeholder="Enter your salary"
+              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+              {...register("salary", { required: "Salary is required" })}
+            />
+            {errors.salary && (
+              <span className="text-red-500 text-sm mt-2">
+                {errors.salary.message}
+              </span>
+            )}
           </div>
 
           {/* Password */}
-          <div className="relative">
-            <label className="block text-sm font-medium text-text mb-2">
-              Password
+          <div className="relative form-control">
+            <label className="label">
+              <span className="label-text">Password</span>
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              name="password"
               placeholder="Enter your password"
               className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              required
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+                validate: {
+                  hasCapitalLetter: (value) =>
+                    /[A-Z]/.test(value) ||
+                    "Password must contain at least one capital letter",
+                  hasSpecialCharacter: (value) =>
+                    /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                    "Password must contain at least one special character",
+                },
+              })}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-3 text-secondary hover:text-accent transition"
+              className="absolute right-4 top-3 text-secondary"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            {errors.password && (
+              <span className="text-red-500 text-sm mt-2">
+                {errors.password.message}
+              </span>
+            )}
           </div>
 
           {/* Register Button */}
