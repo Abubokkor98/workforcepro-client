@@ -4,10 +4,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import useAuth from "../../../customHooks/useAuth";
+import useAxiosPublic from "../../../customHooks/useAxiosPublic";
 
 export default function WorkSheet() {
   const { register, handleSubmit, control, reset } = useForm();
   const { user } = useAuth();
+  const axiosPublic = useAxiosPublic();
   const [tasks, setTasks] = useState([]);
 
   const onSubmit = async (data) => {
@@ -18,9 +20,13 @@ export default function WorkSheet() {
       hours: data.work_duration,
       date: data.date,
     };
-    setTasks([...tasks, newTask]);
-    reset(); // Reset form after submission
-    console.log("Form Data:", data);
+    // post task in the db
+    const { data: task } = await axiosPublic.post("/tasks", newTask);
+    console.log(task);
+    if (task.insertedId) {
+      setTasks([...tasks, newTask]);
+      reset();
+    }
   };
 
   return (
