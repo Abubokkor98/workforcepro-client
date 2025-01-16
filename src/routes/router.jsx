@@ -6,12 +6,11 @@ import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
 import ContactUs from "../pages/contact/ContactUs";
 import DashBoardLayout from "../layouts/DashBoardLayout";
-
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    // home layout
+    // home start here
     children: [
       {
         path: "/",
@@ -23,6 +22,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  // dashboard start here
   {
     path: "/dashboard",
     element: <DashBoardLayout></DashBoardLayout>,

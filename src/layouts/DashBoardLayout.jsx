@@ -5,7 +5,6 @@ export default function DashBoardLayout() {
   const { user } = useAuth();
   const role = "Employee";
 
-  if (!user) return <Navigate to="/login" replace />;
   return (
     <div className="flex min-h-screen bg-background text-text">
       {/* Sidebar */}
