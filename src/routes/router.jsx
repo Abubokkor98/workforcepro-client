@@ -9,6 +9,8 @@ import DashBoardLayout from "../layouts/DashBoardLayout";
 import WorkSheet from "../pages/dashboard/employee/WorkSheet";
 import PaymentHistory from "../pages/dashboard/employee/PaymentHistory";
 import EmployeeList from "../pages/dashboard/HR/EmployeeList";
+import EmployeeDetails from "../pages/dashboard/HR/EmployeeDetails";
+import ProgressPage from "../pages/dashboard/HR/ProgressPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,7 +44,12 @@ const router = createBrowserRouter([
       // HR
       {
         path: "employee-list",
-        element: <EmployeeList></EmployeeList>,
+        // element: <EmployeeList></EmployeeList>,
+        element: <EmployeeDetails></EmployeeDetails>,
+      },
+      {
+        path: "progress",
+        element: <ProgressPage></ProgressPage>,
       },
     ],
   },
