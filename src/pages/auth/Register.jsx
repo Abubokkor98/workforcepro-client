@@ -46,6 +46,7 @@ export default function Register() {
         bank_account_no: parseInt(data.bank_account_no),
         salary: parseInt(data.salary),
         isVerified: false,
+        isFired: false,
       };
       console.log(user);
       const userRes = await axiosPublic.post("/users", user);

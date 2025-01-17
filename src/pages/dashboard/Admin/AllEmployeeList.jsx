@@ -1,107 +1,111 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "react-modal";
-
-// Mock Employee Data
-const mockEmployees = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    designation: "Employee",
-    isHR: false,
-    salary: 50000,
-    adjustedSalary: 50000,
-    isFired: false,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    designation: "HR",
-    isHR: true,
-    salary: 70000,
-    adjustedSalary: 70000,
-    isFired: false,
-  },
-  {
-    id: 3,
-    name: "Alice Brown",
-    email: "alice.brown@example.com",
-    designation: "Employee",
-    isHR: false,
-    salary: 45000,
-    adjustedSalary: 45000,
-    isFired: false,
-  },
-  {
-    id: 4,
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-    designation: "HR",
-    isHR: true,
-    salary: 75000,
-    adjustedSalary: 75000,
-    isFired: true,
-  },
-];
+import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function AllEmployeeList() {
-  const [employees, setEmployees] = useState(mockEmployees);
+  const axiosSecure = useAxiosSecure();
   const [fireModalIsOpen, setFireModalIsOpen] = useState(false);
   const [salaryModalIsOpen, setSalaryModalIsOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [newSalary, setNewSalary] = useState(0);
+  const salaryInputRef = useRef(null);
 
-  const handleMakeHR = (id) => {
-    setEmployees((prev) =>
-      prev.map((emp) =>
-        emp.id === id ? { ...emp, isHR: true, designation: "HR" } : emp
-      )
+  const {
+    data: employees = [],
+    isPending,
+    refetch,
+  } = useQuery({
+    queryKey: ["employees"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(`/users?isVerified=true`);
+      return data;
+    },
+  });
+
+  // handleMakeHR
+  const handleMakeHR = async (user) => {
+    // console.log(user);
+    const updatedUser = {
+      role: "HR",
+    };
+    const { data: updated } = await axiosSecure.patch(
+      `/users/${user._id}`,
+      updatedUser
     );
+    if (updated.modifiedCount > 0) {
+      toast.success(`${user.name} is now an HR!`);
+      refetch();
+    }
   };
 
-  const handleFireEmployee = (id) => {
-    setEmployees((prev) =>
-      prev.map((emp) => (emp.id === id ? { ...emp, isFired: true } : emp))
+  const handleFire = async (user) => {
+    const updatedUser = {
+      isFired: true,
+    };
+    // console.log(user);
+    const { data: updated } = await axiosSecure.patch(
+      `/users/${user._id}`,
+      updatedUser
     );
-    setFireModalIsOpen(false);
+
+    if (updated.modifiedCount > 0) {
+      setFireModalIsOpen(false);
+      toast.error(`${user.name} has been fired.`);
+      refetch();
+    }
   };
 
+  // fire modal
   const handleOpenFireModal = (employee) => {
     setSelectedEmployee(employee);
     setFireModalIsOpen(true);
   };
-
   const handleCloseFireModal = () => {
     setFireModalIsOpen(false);
     setSelectedEmployee(null);
   };
 
+  // salary modal
   const handleOpenSalaryModal = (employee) => {
     setSelectedEmployee(employee);
-    setNewSalary(employee.adjustedSalary);
     setSalaryModalIsOpen(true);
   };
-
   const handleCloseSalaryModal = () => {
     setSalaryModalIsOpen(false);
     setSelectedEmployee(null);
   };
 
-  const handleConfirmAdjustSalary = () => {
-    setEmployees((prev) =>
-      prev.map((emp) =>
-        emp.id === selectedEmployee.id
-          ? { ...emp, adjustedSalary: newSalary, salary: newSalary }
-          : emp
-      )
+  const handleConfirmAdjustSalary = async () => {
+    const newSalary = parseInt(salaryInputRef.current.value);
+    if (selectedEmployee.salary > newSalary) {
+      toast.error("Salary cannot be decreased!");
+      return;
+    }
+    const updatedUser = {
+      salary: newSalary,
+    };
+    const { data: updated } = await axiosSecure.patch(
+      `/users/${selectedEmployee._id}`,
+      updatedUser
     );
-    setSalaryModalIsOpen(false);
+    if (updated.modifiedCount > 0) {
+      setSalaryModalIsOpen(false);
+      toast.success(
+        `${selectedEmployee.name}'s salary updated to $${newSalary}!`
+      );
+      refetch();
+    }
   };
+
+  if (isPending) return <LoadingSpinner></LoadingSpinner>;
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h2 className="text-2xl font-bold text-text mb-6">All Verified Employees</h2>
+      <h2 className="text-2xl font-bold text-text mb-6">
+        All Verified Employees
+      </h2>
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -130,7 +134,7 @@ export default function AllEmployeeList() {
           </thead>
           <tbody>
             {employees.map((emp) => (
-              <tr key={emp.id} className="even:bg-gray-50">
+              <tr key={emp._id} className="even:bg-gray-50">
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
                   {emp.name}
                 </td>
@@ -138,15 +142,20 @@ export default function AllEmployeeList() {
                   {emp.designation}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {!emp.isHR ? (
+                  {emp.role !== "HR" ? (
                     <button
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      onClick={() => handleMakeHR(emp.id)}
+                      className={`bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 ${
+                        emp.isFired ? "cursor-not-allowed opacity-50" : ""
+                      }`}
+                      onClick={() => handleMakeHR(emp)}
+                      disabled={emp.isFired}
                     >
                       Make HR
                     </button>
                   ) : (
-                    <span className="text-green-500 font-medium">Already HR</span>
+                    <span className="text-green-500 font-medium">
+                      Already HR
+                    </span>
                   )}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
@@ -192,7 +201,8 @@ export default function AllEmployeeList() {
       >
         <h2 className="text-xl font-bold mb-4">Confirm Action</h2>
         <p className="text-gray-700 mb-6">
-          Are you sure you want to fire <span className="font-bold">{selectedEmployee?.name}</span>?
+          Are you sure you want to fire{" "}
+          <span className="font-bold">{selectedEmployee?.name}</span>?
         </p>
         <div className="flex justify-end gap-4">
           <button
@@ -203,7 +213,7 @@ export default function AllEmployeeList() {
           </button>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            onClick={() => handleFireEmployee(selectedEmployee.id)}
+            onClick={() => handleFire(selectedEmployee)}
           >
             Fire
           </button>
@@ -228,7 +238,8 @@ export default function AllEmployeeList() {
               <span className="font-bold">Email:</span> {selectedEmployee.email}
             </p>
             <p className="text-gray-700">
-              <span className="font-bold">Designation:</span> {selectedEmployee.designation}
+              <span className="font-bold">Designation:</span>{" "}
+              {selectedEmployee.designation}
             </p>
             <div>
               <label
@@ -239,10 +250,10 @@ export default function AllEmployeeList() {
               </label>
               <input
                 type="number"
+                ref={salaryInputRef}
+                defaultValue={selectedEmployee.salary}
                 id="newSalary"
                 className="border border-gray-300 rounded px-3 py-2 w-full"
-                value={newSalary}
-                onChange={(e) => setNewSalary(Number(e.target.value))}
               />
             </div>
           </div>
