@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-table";
 import Modal from "react-modal";
 import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
@@ -15,7 +16,8 @@ import { Link } from "react-router-dom";
 export default function EmployeeList() {
   const axiosSecure = useAxiosSecure();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [employeeForModal, setEmployeeForModal] = useState(null);
+  const { register, handleSubmit, reset } = useForm();
 
   // Fetch employees with role 'Employee' via useQuery
   const {
@@ -30,12 +32,11 @@ export default function EmployeeList() {
     },
   });
 
-  // update verify btn
+  // Handle verification toggle
   const handleVerified = async (user) => {
     const updatedUser = {
       isVerified: !user.isVerified,
     };
-    console.log(updatedUser);
     const { data: updated } = await axiosSecure.patch(
       `/users/${user._id}`,
       updatedUser
@@ -99,8 +100,8 @@ export default function EmployeeList() {
             }`}
             onClick={() => {
               if (row.original.isVerified) {
-                setSelectedEmployee(row.original);
-                setIsModalOpen(true);
+                setEmployeeForModal(row.original); // Set employee for modal
+                setIsModalOpen(true); // Open modal
               }
             }}
             disabled={!row.original.isVerified}
@@ -133,11 +134,33 @@ export default function EmployeeList() {
   // Modal Handling
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedEmployee(null);
+    setEmployeeForModal(null);
+    reset(); // Reset form values
+  };
+
+  const handlePay = async (data) => {
+    const newPayment = {
+      name: employeeForModal.name,
+      email: employeeForModal.email,
+      salary: employeeForModal.salary,
+      month: data.month,
+      year: data.year,
+      payingDate: "",
+    };
+    // post payment request to the db
+    const { data: payRequest } = await axiosSecure.post(
+      "/payments",
+      newPayment
+    );
+    // console.log(payRequest);
+    if (payRequest.insertedId) {
+      toast.success("Payment request send to Admin");
+    }
+    closeModal();
   };
 
   if (isPending) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -183,13 +206,13 @@ export default function EmployeeList() {
         className="modal bg-white rounded-lg shadow-lg p-6 w-96 mx-auto mt-20"
         overlayClassName="modal-overlay bg-gray-500 bg-opacity-50 fixed inset-0"
       >
-        {selectedEmployee && (
+        {employeeForModal && (
           <div>
             <h2 className="text-xl font-bold text-text mb-4">
-              Pay {selectedEmployee.name}
+              Pay {employeeForModal.name}
             </h2>
-            <p className="mb-4">Salary: ${selectedEmployee.salary}</p>
-            <form>
+            <p className="mb-4">Salary: ${employeeForModal.salary}</p>
+            <form onSubmit={handleSubmit(handlePay)}>
               <div className="mb-4">
                 <label
                   className="block text-sm font-medium mb-1"
@@ -197,12 +220,25 @@ export default function EmployeeList() {
                 >
                   Month
                 </label>
-                <input
+                <select
                   id="month"
-                  type="text"
+                  {...register("month", { required: true })}
                   className="w-full px-3 py-2 border rounded-md"
-                  placeholder="Enter Month"
-                />
+                >
+                  <option value="">Select Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
               </div>
               <div className="mb-4">
                 <label
@@ -214,14 +250,14 @@ export default function EmployeeList() {
                 <input
                   id="year"
                   type="text"
+                  {...register("year", { required: true })}
                   className="w-full px-3 py-2 border rounded-md"
                   placeholder="Enter Year"
                 />
               </div>
               <button
-                type="button"
+                type="submit"
                 className="px-4 py-2 bg-primary text-white rounded-md w-full"
-                onClick={closeModal}
               >
                 Pay
               </button>

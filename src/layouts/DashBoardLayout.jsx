@@ -3,7 +3,7 @@ import useAuth from "../customHooks/useAuth";
 
 export default function DashBoardLayout() {
   const { user } = useAuth();
-  const role = "Admin";
+  const role = "HR";
 
   return (
     <div className="flex min-h-screen bg-background text-text">
