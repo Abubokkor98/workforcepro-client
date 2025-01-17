@@ -1,43 +1,7 @@
 import React, { useState, useEffect } from "react";
-
-// Mock Data for Employees' Progress
-const mockWorkRecords = [
-  {
-    id: 1,
-    name: "John Doe",
-    month: "January",
-    year: 2023,
-    work: "Developed new features for the HR system.",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    month: "February",
-    year: 2023,
-    work: "Fixed bugs and optimized performance.",
-  },
-  {
-    id: 3,
-    name: "Alice Brown",
-    month: "January",
-    year: 2023,
-    work: "Completed UI designs for the dashboard.",
-  },
-  {
-    id: 4,
-    name: "John Doe",
-    month: "March",
-    year: 2023,
-    work: "Implemented authentication and authorization.",
-  },
-  {
-    id: 5,
-    name: "Alice Brown",
-    month: "February",
-    year: 2023,
-    work: "Tested the API endpoints and reported issues.",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 // Dropdown options for months
 const months = [
@@ -56,27 +20,41 @@ const months = [
 ];
 
 export default function ProgressPage() {
-  const [workRecords, setWorkRecords] = useState(mockWorkRecords);
-  const [filteredRecords, setFilteredRecords] = useState(mockWorkRecords);
+  const axiosSecure = useAxiosSecure();
+  const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
 
+  const { data: tasksData = [], isPending } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: async () => {
+      const response = await axiosSecure.get("/tasks");
+      return response.data;
+    },
+  });
+
+  // Filter tasks data based on employee and month
   useEffect(() => {
-    // Filter logic
-    const filtered = workRecords.filter((record) => {
+    const filtered = tasksData.filter((task) => {
       const matchesEmployee = selectedEmployee
-        ? record.name === selectedEmployee
+        ? task.employee_name === selectedEmployee
         : true;
       const matchesMonth = selectedMonth
-        ? record.month === selectedMonth
+        ? new Date(task.date).toLocaleString("en-US", { month: "long" }) ===
+          selectedMonth
         : true;
       return matchesEmployee && matchesMonth;
     });
     setFilteredRecords(filtered);
-  }, [selectedEmployee, selectedMonth, workRecords]);
+  }, [selectedEmployee, selectedMonth, tasksData]);
 
   // Extract unique employee names for the dropdown
-  const employeeNames = [...new Set(workRecords.map((record) => record.name))];
+  const employeeNames = [
+    ...new Set(tasksData.map((task) => task.employee_name)),
+  ];
+
+  if (isPending) return <LoadingSpinner></LoadingSpinner>;
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold text-text mb-6">Progress Records</h2>
@@ -151,18 +129,20 @@ export default function ProgressPage() {
           </thead>
           <tbody>
             {filteredRecords.map((record) => (
-              <tr key={record.id} className="even:bg-gray-50">
+              <tr key={record._id} className="even:bg-gray-50">
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {record.name}
+                  {record.employee_name}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {record.month}
+                  {new Date(record.date).toLocaleString("en-US", {
+                    month: "long",
+                  })}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {record.year}
+                  {new Date(record.date).getFullYear()}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {record.work}
+                  {record.task}
                 </td>
               </tr>
             ))}
