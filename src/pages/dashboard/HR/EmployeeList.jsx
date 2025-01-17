@@ -10,6 +10,7 @@ import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 export default function EmployeeList() {
   const axiosSecure = useAxiosSecure();
@@ -41,9 +42,7 @@ export default function EmployeeList() {
     );
     if (updated.modifiedCount > 0) {
       toast.success(
-        updatedUser.isVerified
-          ? "User verified"
-          : "User unverified"
+        updatedUser.isVerified ? "User verified" : "User unverified"
       );
       refetch();
     }
@@ -113,12 +112,11 @@ export default function EmployeeList() {
       {
         header: "Details",
         cell: ({ row }) => (
-          <button
-            className="px-4 py-2 bg-accent text-white rounded-md"
-            onClick={() => console.log("Go to Details for:", row.original)}
-          >
-            Details
-          </button>
+          <Link to={`/dashboard/employee-details/${row.original._id}`}>
+            <button className="px-4 py-2 bg-accent text-white rounded-md">
+              Details
+            </button>
+          </Link>
         ),
       },
     ],

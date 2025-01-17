@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   BarChart,
@@ -9,42 +8,23 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
-// Mock API call
-const fetchEmployeeDetails = async (slug) => {
-  // Simulate an API call to get employee details
-  const mockData = {
-    name: "John Doe",
-    photoURL: "https://via.placeholder.com/150",
-    designation: "Software Engineer",
-    salaryHistory: [
-      { month: "January", year: 2023, salary: 5000 },
-      { month: "February", year: 2023, salary: 5000 },
-      { month: "March", year: 2023, salary: 5000 },
-      { month: "April", year: 2023, salary: 5000 },
-    ],
-  };
-
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(mockData), 1000); // Simulate API delay
-  });
-};
 export default function EmployeeDetails() {
-  const { slug } = useParams(); // Get slug from URL
-  const [employee, setEmployee] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  const axiosSecure = useAxiosSecure();
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      setLoading(true);
-      const data = await fetchEmployeeDetails(slug);
-      setEmployee(data);
-      setLoading(false);
-    };
-    fetchDetails();
-  }, [slug]);
+  const { data: employee = {}, isPending } = useQuery({
+    queryKey: ["employee",id],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(`/users/${id}`);
+      return data;
+    },
+  });
+  console.log(employee);
 
-  if (loading) {
+  if (isPending) {
     return (
       <div className="text-center mt-10 text-lg font-semibold">Loading...</div>
     );
@@ -64,7 +44,7 @@ export default function EmployeeDetails() {
 
       <div className="flex flex-col md:flex-row items-center gap-6 bg-white shadow-md rounded-lg p-6 mb-8">
         <img
-          src={employee.photoURL}
+          src={employee.photo}
           alt={employee.name}
           className="w-32 h-32 rounded-full object-cover"
         />
@@ -78,7 +58,7 @@ export default function EmployeeDetails() {
         <h3 className="text-lg font-bold text-text mb-4">Salary History</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
-            data={employee.salaryHistory.map((item) => ({
+            data={employee.salaryHistory?.map((item) => ({
               ...item,
               label: `${item.month} ${item.year}`,
             }))}
