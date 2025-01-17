@@ -1,5 +1,7 @@
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal from "react-modal";
 import { useForm, Controller } from "react-hook-form";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import useAuth from "../../../customHooks/useAuth";
@@ -9,13 +11,30 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
+Modal.setAppElement("#root"); // Ensure accessibility
+
 export default function WorkSheet() {
-  const { register, handleSubmit, control, reset } = useForm();
+  // Main form state
+  const mainForm = useForm();
+  const { register, handleSubmit, control, reset } = mainForm;
+
+  // Modal form state
+  const modalForm = useForm();
+  const {
+    register: modalRegister,
+    handleSubmit: modalHandleSubmit,
+    control: modalControl,
+    setValue,
+  } = modalForm;
+
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const [tasks, loading, refetch] = useTasks();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
+  // Main form submit handler
   const onSubmit = async (data) => {
     const newTask = {
       employee_name: user.displayName,
@@ -24,42 +43,67 @@ export default function WorkSheet() {
       hours: data.work_duration,
       date: data.date,
     };
-    console.log(newTask);
-    // post task in the db
     const { data: task } = await axiosPublic.post("/tasks", newTask);
-    console.log(task);
     if (task.insertedId) {
       reset();
       refetch();
     }
   };
 
-  const handleDeleteTask =async (task) => {
-    console.log('delete btn clicked');
-    const { data } =await axiosSecure.delete(`/tasks/${task._id}`);
-    console.log(data);
+  // Delete handler
+  const handleDeleteTask = async (task) => {
+    const { data } = await axiosSecure.delete(`/tasks/${task._id}`);
     if (data.deletedCount > 0) {
-      toast.error("task delete successfully");
+      toast.error("Task deleted successfully");
       refetch();
+    }
+  };
+
+  // Open modal and pre-fill fields
+  const openEditModal = (task) => {
+    setSelectedTask(task);
+    setValue("edit_task", task.task);
+    setValue("edit_work_duration", task.hours);
+    setValue("edit_date", new Date(task.date));
+    setIsModalOpen(true);
+  };
+
+  // Modal form submit handler
+  const handleEditSubmit = async (data) => {
+    const updatedTask = {
+      task: data.edit_task,
+      hours: data.edit_work_duration,
+      date: data.edit_date,
+    };
+    const { data: updated } = await axiosSecure.patch(
+      `/tasks/${selectedTask._id}`,
+      updatedTask
+    );
+    if (updated.modifiedCount > 0) {
+      toast.success("Task updated successfully");
+      refetch();
+      setIsModalOpen(false);
     }
   };
 
   if (loading) {
     return <LoadingSpinner />;
   }
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Work Sheet</h2>
-      {/* Form */}
+
+      {/* Main Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex items-center gap-4 mb-6"
+        className={`flex items-center gap-4 mb-6`}
       >
-        {/* Task Dropdown */}
         <select
           {...register("task", { required: true })}
           defaultValue={""}
           className="border p-2 rounded"
+          disabled={isModalOpen}
         >
           <option disabled value={""}>
             Select Your Task
@@ -70,15 +114,14 @@ export default function WorkSheet() {
           <option>Paper-work</option>
         </select>
 
-        {/* Work Duration Input */}
         <input
           type="number"
           {...register("work_duration", { required: true })}
           placeholder="Hours Worked"
           className="border p-2 rounded"
+          disabled={isModalOpen}
         />
 
-        {/* Date Picker */}
         <Controller
           name="date"
           control={control}
@@ -89,14 +132,15 @@ export default function WorkSheet() {
               selected={field.value}
               onChange={(date) => field.onChange(date)}
               className="border p-2 rounded"
+              disabled={isModalOpen}
             />
           )}
         />
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="bg-primary text-white px-4 py-2 rounded"
+          disabled={isModalOpen}
         >
           Add
         </button>
@@ -113,9 +157,9 @@ export default function WorkSheet() {
           </tr>
         </thead>
         <tbody>
-          {tasks.map((task, index) => (
+          {tasks.map((task) => (
             <tr
-              key={index}
+              key={task._id}
               className="odd:bg-background even:bg-accent/10 text-center"
             >
               <td className="p-2">{task.task}</td>
@@ -124,7 +168,7 @@ export default function WorkSheet() {
               <td className="p-2">
                 <button
                   className="text-primary hover:text-secondary"
-                  onClick={() => console.log("Edit task", index)}
+                  onClick={() => openEditModal(task)}
                 >
                   <FiEdit size={20} />
                 </button>
@@ -140,6 +184,65 @@ export default function WorkSheet() {
           ))}
         </tbody>
       </table>
+
+      {/* Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Edit Task"
+        className="bg-white p-6 rounded shadow-lg max-w-md mx-auto mt-10"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <h2 className="text-xl font-bold mb-4">Edit Task</h2>
+        <form onSubmit={modalHandleSubmit(handleEditSubmit)}>
+          <select
+            {...modalRegister("edit_task", { required: true })}
+            className="border p-2 rounded w-full mb-4"
+          >
+            <option>Sales</option>
+            <option>Support</option>
+            <option>Content</option>
+            <option>Paper-work</option>
+          </select>
+
+          <input
+            type="number"
+            {...modalRegister("edit_work_duration", { required: true })}
+            placeholder="Hours Worked"
+            className="border p-2 rounded w-full mb-4"
+          />
+
+          <Controller
+            name="edit_date"
+            control={modalControl}
+            defaultValue={new Date()}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <DatePicker
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                className="border p-2 rounded w-full mb-4"
+              />
+            )}
+          />
+
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="bg-primary text-white px-4 py-2 rounded"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="bg-gray-300 text-black px-4 py-2 rounded"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
