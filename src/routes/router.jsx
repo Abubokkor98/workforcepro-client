@@ -13,6 +13,7 @@ import EmployeeDetails from "../pages/dashboard/HR/EmployeeDetails";
 import ProgressPage from "../pages/dashboard/HR/ProgressPage";
 import AllEmployeeList from "../pages/dashboard/Admin/AllEmployeeList";
 import Payroll from "../pages/dashboard/Admin/Payroll";
+import DashBoard from "../test/DashBoard";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
       {
         path: "employee-list",
         element: <EmployeeList></EmployeeList>,
+        // element: <DashBoard></DashBoard>
         // element: <EmployeeDetails></EmployeeDetails>,
       },
       {

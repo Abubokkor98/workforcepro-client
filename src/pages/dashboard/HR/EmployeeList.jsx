@@ -7,6 +7,9 @@ import {
 import Modal from "react-modal";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import toast from "react-hot-toast";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function EmployeeList() {
   const axiosSecure = useAxiosSecure();
@@ -14,13 +17,37 @@ export default function EmployeeList() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   // Fetch employees with role 'Employee' via useQuery
-  const { data: employeeData = [] } = useQuery({
+  const {
+    data: employeeData = [],
+    isPending,
+    refetch,
+  } = useQuery({
     queryKey: ["employees"],
     queryFn: async () => {
       const { data } = await axiosSecure.get(`/users?role=Employee`);
       return data;
     },
   });
+
+  // update verify btn
+  const handleVerified = async (user) => {
+    const updatedUser = {
+      isVerified: !user.isVerified,
+    };
+    console.log(updatedUser);
+    const { data: updated } = await axiosSecure.patch(
+      `/users/${user._id}`,
+      updatedUser
+    );
+    if (updated.modifiedCount > 0) {
+      toast.success(
+        updatedUser.isVerified
+          ? "User verified"
+          : "User unverified"
+      );
+      refetch();
+    }
+  };
 
   // Table Columns Definition
   const columns = useMemo(
@@ -43,9 +70,13 @@ export default function EmployeeList() {
                 ? "bg-green-500 text-white"
                 : "bg-red-500 text-white"
             }`}
-            onClick={() => console.log("Toggle Verified for:", row.original)}
+            onClick={() => handleVerified(row.original)}
           >
-            {row.original.isVerified ? "✅" : "❌"}
+            {row.original.isVerified ? (
+              <AiOutlineCheck size={20} />
+            ) : (
+              <AiOutlineClose size={20} />
+            )}
           </button>
         ),
       },
@@ -106,6 +137,10 @@ export default function EmployeeList() {
     setIsModalOpen(false);
     setSelectedEmployee(null);
   };
+
+  if (isPending) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-6">
