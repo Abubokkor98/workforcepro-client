@@ -42,11 +42,9 @@ export default function EmployeeList() {
       updatedUser
     );
     if (updated.modifiedCount > 0) {
-      toast.success(
-        updatedUser.isVerified
-          ? "User successfully verified!"
-          : "User unverified successfully!"
-      );
+      updatedUser.isVerified
+        ? toast.success("User successfully verified!")
+        : toast.error("User unverified successfully!");
       refetch();
     }
   };

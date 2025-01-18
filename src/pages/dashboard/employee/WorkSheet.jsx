@@ -43,7 +43,7 @@ export default function WorkSheet() {
       hours: data.work_duration,
       date: data.date,
     };
-    const { data: task } = await axiosPublic.post("/tasks", newTask);
+    const { data: task } = await axiosSecure.post("/tasks", newTask);
     if (task.insertedId) {
       reset();
       refetch();

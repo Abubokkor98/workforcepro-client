@@ -18,6 +18,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoutes from "./AdminRoutes";
 import EmployeeRoutes from "./EmployeeRoutes";
 import HrRoutes from "./HrRoutes";
+import Payment from "../pages/dashboard/Admin/Payment";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoutes>
             <Payroll></Payroll>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "payroll/:id",
+        element: (
+          <AdminRoutes>
+            <Payment></Payment>
           </AdminRoutes>
         ),
       },

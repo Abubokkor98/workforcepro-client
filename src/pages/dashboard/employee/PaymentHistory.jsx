@@ -1,13 +1,42 @@
 import ReactPaginate from "react-paginate";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import useAuth from "../../../customHooks/useAuth";
+import { useState } from "react";
 
 export default function PaymentHistory() {
-  const mockPayments = [
-    { month: "January", year: 2025, amount: 1000, transactionId: "abc123" },
-    { month: "February", year: 2025, amount: 1200, transactionId: "def456" },
-    { month: "March", year: 2025, amount: 1500, transactionId: "ghi789" },
-    { month: "April", year: 2025, amount: 1700, transactionId: "jkl012" },
-    { month: "May", year: 2025, amount: 1300, transactionId: "mno345" },
-  ];
+  const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5; // Items per page
+
+  // Fetch payment data
+  const { data: payments = [], isPending } = useQuery({
+    queryKey: ["payments", user?.email],
+    queryFn: async () => {
+      // Ensure the hook runs even if email is not present
+      const response = await axiosSecure.get(`/payments/${user?.email}`);
+      return response.data;
+    },
+  });
+
+  // Show loading state
+  if (isPending) {
+    return <p>Loading...</p>;
+  }
+
+  // Pagination state
+
+  const pageCount = Math.ceil(payments.length / itemsPerPage);
+  const displayedPayments = payments.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold text-text mb-4">Payment History</h2>
@@ -17,13 +46,15 @@ export default function PaymentHistory() {
             <tr className="bg-primary text-white text-left">
               <th className="px-6 py-3">Month, Year</th>
               <th className="px-6 py-3">Amount</th>
+              <th className="px-6 py-3">Status</th>
               <th className="px-6 py-3">Transaction ID</th>
+              <th className="px-6 py-3">Paying date</th>
             </tr>
           </thead>
           <tbody>
-            {mockPayments.map((payment, index) => (
+            {displayedPayments.map((payment, index) => (
               <tr
-                key={index}
+                key={payment._id}
                 className={`border-b ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
                 } hover:bg-accent`}
@@ -31,8 +62,10 @@ export default function PaymentHistory() {
                 <td className="px-6 py-3">
                   {payment.month}, {payment.year}
                 </td>
-                <td className="px-6 py-3">${payment.amount}</td>
-                <td className="px-6 py-3">{payment.transactionId}</td>
+                <td className="px-6 py-3">${payment.salary}</td>
+                <td className="px-6 py-3">{payment.paymentStatus ==='paid' ?'Paid ': "Not Paid"}</td>
+                <td className="px-6 py-3">{payment.transactionId || "N/A"}</td>
+                <td className="px-6 py-3">{payment.payingDate}</td>
               </tr>
             ))}
           </tbody>
@@ -43,7 +76,8 @@ export default function PaymentHistory() {
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
-          pageCount={2} // Change this as per your data
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
           containerClassName={"pagination flex justify-center gap-4"}
           activeClassName={"text-accent font-bold"}
           previousClassName={"px-4 py-2 bg-primary text-white rounded-md"}

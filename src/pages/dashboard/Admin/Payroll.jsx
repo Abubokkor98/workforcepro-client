@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 export default function Payroll() {
   const axiosSecure = useAxiosSecure();
@@ -107,6 +108,8 @@ export default function Payroll() {
                     >
                       Pay
                     </button>
+                    // <Link to={`/dashboard/payroll/${employee._id}`}>
+                    // </Link>
                   )}
                 </td>
               </tr>
