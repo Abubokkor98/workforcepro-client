@@ -15,6 +15,9 @@ import AllEmployeeList from "../pages/dashboard/Admin/AllEmployeeList";
 import Payroll from "../pages/dashboard/Admin/Payroll";
 import DashBoard from "../test/DashBoard";
 import PrivateRoute from "./PrivateRoute";
+import AdminRoutes from "./AdminRoutes";
+import EmployeeRoutes from "./EmployeeRoutes";
+import HrRoutes from "./HrRoutes";
 
 const router = createBrowserRouter([
   {
@@ -45,35 +48,62 @@ const router = createBrowserRouter([
       // employee
       {
         path: "work-sheet",
-        element: <WorkSheet></WorkSheet>,
+        element: (
+          <EmployeeRoutes>
+            <WorkSheet></WorkSheet>
+          </EmployeeRoutes>
+        ),
       },
       {
         path: "payment-history",
-        element: <PaymentHistory></PaymentHistory>,
+        element: (
+          <EmployeeRoutes>
+            <PaymentHistory></PaymentHistory>
+          </EmployeeRoutes>
+        ),
       },
       // HR
       {
         path: "employee-list",
-        element: <EmployeeList></EmployeeList>,
+        element: (
+          <HrRoutes>
+            <EmployeeList></EmployeeList>
+          </HrRoutes>
+        ),
         // element: <DashBoard></DashBoard>
-        // element: <EmployeeDetails></EmployeeDetails>,
       },
       {
         path: "employee-details/:id",
-        element: <EmployeeDetails></EmployeeDetails>,
+        element: (
+          <HrRoutes>
+            <EmployeeDetails></EmployeeDetails>
+          </HrRoutes>
+        ),
       },
       {
         path: "progress",
-        element: <ProgressPage></ProgressPage>,
+        element: (
+          <HrRoutes>
+            <ProgressPage></ProgressPage>
+          </HrRoutes>
+        ),
       },
       // Admin
       {
         path: "all-employees",
-        element: <AllEmployeeList></AllEmployeeList>,
+        element: (
+          <AdminRoutes>
+            <AllEmployeeList></AllEmployeeList>
+          </AdminRoutes>
+        ),
       },
       {
         path: "payroll",
-        element: <Payroll></Payroll>,
+        element: (
+          <AdminRoutes>
+            <Payroll></Payroll>
+          </AdminRoutes>
+        ),
       },
     ],
   },
