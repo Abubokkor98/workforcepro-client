@@ -43,7 +43,9 @@ export default function EmployeeList() {
     );
     if (updated.modifiedCount > 0) {
       toast.success(
-        updatedUser.isVerified ? "User successfully verified!" : "User unverified successfully!"
+        updatedUser.isVerified
+          ? "User successfully verified!"
+          : "User unverified successfully!"
       );
       refetch();
     }
@@ -135,7 +137,7 @@ export default function EmployeeList() {
   const closeModal = () => {
     setIsModalOpen(false);
     setEmployeeForModal(null);
-    reset(); // Reset form values
+    reset();
   };
 
   const handlePay = async (data) => {
@@ -145,6 +147,7 @@ export default function EmployeeList() {
       salary: employeeForModal.salary,
       month: data.month,
       year: data.year,
+      paymentStatus: "pending",
       payingDate: "",
     };
     // post payment request to the db
