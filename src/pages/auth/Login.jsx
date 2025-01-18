@@ -9,8 +9,10 @@ import useAuth from "../../customHooks/useAuth";
 export default function Login() {
   const { loginUser, setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ export default function Login() {
       .then((result) => {
         const user = result.user;
         setUser(user);
-        navigate(location?.state ? location.state : "/");
+        navigate(from, { replace: true });
         toast.success("Login successfully");
       })
       .catch((err) => {

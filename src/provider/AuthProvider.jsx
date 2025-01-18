@@ -9,11 +9,13 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import useAxiosPublic from "../customHooks/useAxiosPublic";
 
 export const AuthContext = createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
 
   // register user
   const registerUser = (email, password) => {
@@ -43,15 +45,27 @@ export default function AuthProvider({ children }) {
 
   // firease observer
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        // Get token and store it in local storage
+        const userInfo = { email: currentUser.email };
+        const { data } = await axiosPublic.post("jwt", userInfo);
+        // Store token
+        localStorage.setItem("access-token", data.token);
+      } else {
+        // Remove token if there is no user
+        localStorage.removeItem("access-token");
+      }
+
       setLoading(false);
     });
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [axiosPublic]);
 
   const userInfo = {
     user,

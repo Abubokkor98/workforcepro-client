@@ -1,9 +1,14 @@
 import { Outlet, NavLink, Navigate, Link } from "react-router-dom";
-import useAuth from "../customHooks/useAuth";
+import useRole from "../customHooks/useRole";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function DashBoardLayout() {
-  const { user } = useAuth();
-  const role = "Admin";
+  const [role, loading] = useRole();
+  console.log(role);
+
+  if (loading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   return (
     <div className="flex min-h-screen bg-background text-text">
@@ -92,7 +97,7 @@ export default function DashBoardLayout() {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        <Outlet /> {/* Nested routes will render here */}
+        <Outlet />
       </main>
     </div>
   );
