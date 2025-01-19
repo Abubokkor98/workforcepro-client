@@ -1,6 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import moment from "moment";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import useAuth from "../../../customHooks/useAuth";
@@ -8,7 +8,7 @@ import useAuth from "../../../customHooks/useAuth";
 export default function PaymentModal({ isOpen, onClose, employee, refetch }) {
   const [error, setError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [isCardComplete, setIsCardComplete] = useState(false); // New state
+  const [isCardComplete, setIsCardComplete] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
@@ -60,7 +60,7 @@ export default function PaymentModal({ isOpen, onClose, employee, refetch }) {
     }
 
     if (paymentIntent.status === "succeeded") {
-      const currentDate = format(new Date(), "yyyy-MM-dd");
+      const currentDate = moment().format("hh:mm A, MMMM Do, YYYY");
       const updatedPayment = {
         paymentStatus: "paid",
         transactionId: paymentIntent.id,

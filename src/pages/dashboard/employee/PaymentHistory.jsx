@@ -15,7 +15,7 @@ export default function PaymentHistory() {
     queryKey: ["payments", user?.email],
     queryFn: async () => {
       // Ensure the hook runs even if email is not present
-      const response = await axiosSecure.get(`/payments/${user?.email}`);
+      const response = await axiosSecure.get(`/payments/email/${user?.email}`);
       return response.data;
     },
   });
@@ -57,13 +57,15 @@ export default function PaymentHistory() {
                 key={payment._id}
                 className={`border-b ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
-                } hover:bg-accent`}
+                } `}
               >
                 <td className="px-6 py-3">
                   {payment.month}, {payment.year}
                 </td>
                 <td className="px-6 py-3">${payment.salary}</td>
-                <td className="px-6 py-3">{payment.paymentStatus ==='paid' ?'Paid ': "Not Paid"}</td>
+                <td className="px-6 py-3">
+                  {payment.paymentStatus === "paid" ? "Paid " : "Not Paid"}
+                </td>
                 <td className="px-6 py-3">{payment.transactionId || "N/A"}</td>
                 <td className="px-6 py-3">{payment.payingDate}</td>
               </tr>
