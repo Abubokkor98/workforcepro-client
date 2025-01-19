@@ -4,12 +4,14 @@ import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import avatar from "../../../assets/default-avatar.png";
 
 export default function AllEmployeeList() {
   const axiosSecure = useAxiosSecure();
   const [fireModalIsOpen, setFireModalIsOpen] = useState(false);
   const [salaryModalIsOpen, setSalaryModalIsOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [isGridView, setIsGridView] = useState(false); // Toggle state
   const salaryInputRef = useRef(null);
 
   const {
@@ -26,10 +28,7 @@ export default function AllEmployeeList() {
 
   // handleMakeHR
   const handleMakeHR = async (user) => {
-    // console.log(user);
-    const updatedUser = {
-      role: "HR",
-    };
+    const updatedUser = { role: "HR" };
     const { data: updated } = await axiosSecure.patch(
       `/users/${user._id}`,
       updatedUser
@@ -42,15 +41,11 @@ export default function AllEmployeeList() {
 
   // handle fire
   const handleFire = async (user) => {
-    const updatedUser = {
-      isFired: true,
-    };
-    // console.log(user);
+    const updatedUser = { isFired: true };
     const { data: updated } = await axiosSecure.patch(
       `/users/${user._id}`,
       updatedUser
     );
-
     if (updated.modifiedCount > 0) {
       setFireModalIsOpen(false);
       toast.error(`${user.name} has been fired.`);
@@ -84,9 +79,7 @@ export default function AllEmployeeList() {
       toast.error("Salary cannot be decreased!");
       return;
     }
-    const updatedUser = {
-      salary: newSalary,
-    };
+    const updatedUser = { salary: newSalary };
     const { data: updated } = await axiosSecure.patch(
       `/users/${selectedEmployee._id}`,
       updatedUser
@@ -100,7 +93,7 @@ export default function AllEmployeeList() {
     }
   };
 
-  if (isPending) return <LoadingSpinner></LoadingSpinner>;
+  if (isPending) return <LoadingSpinner />;
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -108,89 +101,183 @@ export default function AllEmployeeList() {
         All Verified Employees
       </h2>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Name
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Designation
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Make HR
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Fire
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Salary
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Adjust Salary
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {employees.map((emp) => (
-              <tr key={emp._id} className="even:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {emp.name}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {emp.designation}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {emp.role !== "HR" ? (
-                    <button
-                      className={`bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 ${
-                        emp.isFired ? "cursor-not-allowed opacity-50" : ""
-                      }`}
-                      onClick={() => handleMakeHR(emp)}
-                      disabled={emp.isFired}
-                    >
-                      Make HR
-                    </button>
-                  ) : (
-                    <span className="text-green-500 font-medium">
-                      Already HR
-                    </span>
-                  )}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {!emp.isFired ? (
-                    <button
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                      onClick={() => handleOpenFireModal(emp)}
-                    >
-                      Fire
-                    </button>
-                  ) : (
-                    <span className="text-gray-500 italic">Fired</span>
-                  )}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {emp.salary}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                  {!emp.isFired ? (
-                    <button
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                      onClick={() => handleOpenSalaryModal(emp)}
-                    >
-                      Adjust Salary
-                    </button>
-                  ) : (
-                    <span className="text-gray-500 italic">N/A</span>
-                  )}
-                </td>
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsGridView((prev) => !prev)}
+        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+      >
+        {isGridView ? "Table View" : "Grid View"}
+      </button>
+
+      {/* Table View */}
+      {!isGridView ? (
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse border border-gray-300">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Name
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Designation
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Make HR
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Fire
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Salary
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Adjust Salary
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {employees.map((emp) => (
+                <tr key={emp._id} className="even:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {emp.name}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {emp.designation}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {emp.role !== "HR" ? (
+                      <button
+                        className={`bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 ${
+                          emp.isFired ? "cursor-not-allowed opacity-50" : ""
+                        }`}
+                        onClick={() => handleMakeHR(emp)}
+                        disabled={emp.isFired}
+                      >
+                        Make HR
+                      </button>
+                    ) : (
+                      <span className="text-green-500 font-medium">
+                        Already HR
+                      </span>
+                    )}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {!emp.isFired ? (
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                        onClick={() => handleOpenFireModal(emp)}
+                      >
+                        Fire
+                      </button>
+                    ) : (
+                      <span className="text-gray-500 italic">Fired</span>
+                    )}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {emp.salary}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {!emp.isFired ? (
+                      <button
+                        className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                        onClick={() => handleOpenSalaryModal(emp)}
+                      >
+                        Adjust Salary
+                      </button>
+                    ) : (
+                      <span className="text-gray-500 italic">N/A</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        // Card Grid View
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {employees.map((emp) => (
+    <div
+      key={emp._id}
+      className="border border-gray-300 p-4 rounded-lg shadow-lg hover:shadow-xl transition"
+    >
+      {/* Employee Image */}
+      <div className="mb-4 flex justify-center">
+        <img
+          src={emp.photo || avatar}
+          alt={`${emp.name}'s profile`}
+          className="w-24 h-24 rounded-full object-cover shadow-md"
+        />
       </div>
+
+      {/* Employee Information */}
+      <h3 className="font-semibold text-lg text-center">{emp.name}</h3>
+      <p
+        className={`text-center font-medium ${
+          emp.role === "HR" ? "text-green-500" : "text-blue-500"
+        }`}
+      >
+        {emp.role === "HR" ? "HR" : "Employee"}
+      </p>
+      <p className="text-center text-sm text-gray-600">
+        <span className="font-bold">Designation:</span> {emp.designation}
+      </p>
+
+      <p className="text-center text-sm text-gray-600">
+        <span className="font-bold">Salary:</span> ${emp.salary}
+      </p>
+
+      {/* Action Buttons */}
+      <div className="mt-4 flex justify-between gap-2">
+        {emp.isFired ? (
+          <span className="text-red-500 italic">Fired</span>
+        ) : (
+          <>
+            {emp.role !== "HR" && (
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                onClick={() => handleMakeHR(emp)}
+              >
+                Make HR
+              </button>
+            )}
+
+            {emp.role !== "HR" && (
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                onClick={() => handleOpenFireModal(emp)}
+              >
+                Fire
+              </button>
+            )}
+          </>
+        )}
+
+        {/* If the employee is fired but not HR, disable "Make HR" button */}
+        {emp.isFired && emp.role !== "HR" && (
+          <button
+            disabled
+            className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed"
+          >
+            Make HR
+          </button>
+        )}
+
+        {/* If the employee is HR but not fired, show the "Fire" button */}
+        {emp.role === "HR" && !emp.isFired && (
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            onClick={() => handleOpenFireModal(emp)}
+          >
+            Fire
+          </button>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
+      )}
 
       {/* fire modal */}
       <Modal
