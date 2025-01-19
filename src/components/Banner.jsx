@@ -1,5 +1,5 @@
 import { Fade } from "react-awesome-reveal";
-import bannerImg from "../assets/Teamwork.jpg";
+import bannerImg from "../assets/banner-img.png";
 
 export default function Banner() {
   return (
@@ -8,7 +8,7 @@ export default function Banner() {
         {/* Left Section */}
         <div className="text-center md:text-left max-w-xl">
           <Fade direction="left" triggerOnce>
-            <h1 className="text-4xl md:text-5xl font-bold leading-snug text-primary">
+            <h1 className="text-4xl font-bold leading-snug text-primary">
               Empowering Employees, Elevating Businesses
             </h1>
             <p className="mt-6 text-lg text-text">
@@ -39,7 +39,7 @@ export default function Banner() {
               <img
                 src={bannerImg}
                 alt="Teamwork Success"
-                className="relative z-10 rounded-lg shadow-2xl hover:scale-105 transition-transform duration-300"
+                className="relative z-10 rounded-lg shadow-2xl w-[320px] h-[320px]"
               />
             </div>
           </div>

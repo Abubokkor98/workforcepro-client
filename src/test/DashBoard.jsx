@@ -1,5 +1,5 @@
-import React from 'react'
-import { Fade } from 'react-awesome-reveal'
+import React from "react";
+import { Fade } from "react-awesome-reveal";
 
 export default function DashBoard() {
   return (
@@ -81,7 +81,8 @@ export default function DashBoard() {
           </h3>
           <ul className="space-y-3">
             <li className="bg-background p-3 rounded-md">
-              New employee <strong>Emily Johnson</strong> added to IT department.
+              New employee <strong>Emily Johnson</strong> added to IT
+              department.
             </li>
             <li className="bg-background p-3 rounded-md">
               Weekly attendance report is available.
@@ -94,118 +95,5 @@ export default function DashBoard() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-/**  payment history */
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import ReactPaginate from "react-paginate";
-
-// const PaymentHistory = () => {
-//   const [payments, setPayments] = useState([]);
-//   const [currentPage, setCurrentPage] = useState(0);
-//   const [itemsPerPage] = useState(5); // Change this value to increase/decrease items per page
-//   const [loading, setLoading] = useState(true);
-
-//   // Fetch payment history
-//   useEffect(() => {
-//     const fetchPayments = async () => {
-//       try {
-//         setLoading(true);
-//         const response = await axios.get("/api/payment-history"); // Update with your API endpoint
-//         const sortedPayments = response.data.sort((a, b) =>
-//           new Date(a.date) - new Date(b.date)
-//         );
-//         setPayments(sortedPayments);
-//       } catch (error) {
-//         console.error("Failed to fetch payment history:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchPayments();
-//   }, []);
-
-//   // Paginate payments
-//   const startIndex = currentPage * itemsPerPage;
-//   const endIndex = startIndex + itemsPerPage;
-//   const displayedPayments = payments.slice(startIndex, endIndex);
-
-//   // Handle page change
-//   const handlePageClick = (event) => {
-//     setCurrentPage(event.selected);
-//   };
-
-//   if (loading) {
-//     return (
-//       <div className="flex items-center justify-center h-screen">
-//         <div className="text-primary text-xl font-semibold">Loading...</div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="container mx-auto px-4 py-6">
-//       <h2 className="text-2xl font-bold text-text mb-4">Payment History</h2>
-//       <div className="overflow-x-auto shadow-md rounded-lg">
-//         <table className="min-w-full bg-white rounded-lg shadow-md">
-//           <thead>
-//             <tr className="bg-primary text-white text-left">
-//               <th className="px-6 py-3">Month, Year</th>
-//               <th className="px-6 py-3">Amount</th>
-//               <th className="px-6 py-3">Transaction ID</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {displayedPayments.length > 0 ? (
-//               displayedPayments.map((payment, index) => (
-//                 <tr
-//                   key={index}
-//                   className={`border-b ${
-//                     index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
-//                   } hover:bg-accent`}
-//                 >
-//                   <td className="px-6 py-3">
-//                     {payment.month}, {payment.year}
-//                   </td>
-//                   <td className="px-6 py-3">${payment.amount}</td>
-//                   <td className="px-6 py-3">{payment.transactionId}</td>
-//                 </tr>
-//               ))
-//             ) : (
-//               <tr>
-//                 <td
-//                   colSpan={3}
-//                   className="text-center text-red-500 font-medium py-4"
-//                 >
-//                   No payment history found.
-//                 </td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//       {payments.length > itemsPerPage && (
-//         <div className="mt-6">
-//           <ReactPaginate
-//             previousLabel={"Previous"}
-//             nextLabel={"Next"}
-//             pageCount={Math.ceil(payments.length / itemsPerPage)}
-//             onPageChange={handlePageClick}
-//             containerClassName={"pagination flex justify-center gap-4"}
-//             activeClassName={"text-accent font-bold"}
-//             previousClassName={"px-4 py-2 bg-primary text-white rounded-md"}
-//             nextClassName={"px-4 py-2 bg-primary text-white rounded-md"}
-//             pageClassName={"px-3 py-1 rounded-md"}
-//             breakLabel={"..."}
-//           />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default PaymentHistory;
-
