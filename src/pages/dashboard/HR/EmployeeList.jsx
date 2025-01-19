@@ -19,7 +19,6 @@ export default function EmployeeList() {
   const [employeeForModal, setEmployeeForModal] = useState(null);
   const { register, handleSubmit, reset } = useForm();
 
-  // Fetch employees with role 'Employee' via useQuery
   const {
     data: employeeData = [],
     isPending,
@@ -32,7 +31,7 @@ export default function EmployeeList() {
     },
   });
 
-  // Handle verification toggle
+  // handle verification toggle
   const handleVerified = async (user) => {
     const updatedUser = {
       isVerified: !user.isVerified,
@@ -56,6 +55,7 @@ export default function EmployeeList() {
     reset();
   };
 
+  // handle payrequest to the admin
   const handlePay = async (data) => {
     const newPayment = {
       name: employeeForModal.name,
@@ -79,8 +79,7 @@ export default function EmployeeList() {
     closeModal();
   };
 
-
-  // Table Columns Definition
+  // Table Columns
   const columns = useMemo(
     () => [
       {
@@ -154,12 +153,12 @@ export default function EmployeeList() {
     ],
     []
   );
-    // React Table Instance
-    const table = useReactTable({
-      data: employeeData,
-      columns,
-      getCoreRowModel: getCoreRowModel(),
-    });
+  //Table Instance
+  const table = useReactTable({
+    data: employeeData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   if (isPending) {
     return <LoadingSpinner />;
@@ -169,7 +168,7 @@ export default function EmployeeList() {
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold text-text mb-4">Employee List</h2>
 
-      {/* Employee Table */}
+      {/*table */}
       <div className="overflow-x-auto shadow-md rounded-lg">
         <table className="min-w-full bg-white rounded-lg shadow-md">
           <thead className="bg-primary text-white">
@@ -200,7 +199,7 @@ export default function EmployeeList() {
         </table>
       </div>
 
-      {/* Pay Modal */}
+      {/* modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}

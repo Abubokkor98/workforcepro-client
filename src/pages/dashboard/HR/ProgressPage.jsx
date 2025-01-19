@@ -1,29 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-
-// Dropdown options for months
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 export default function ProgressPage() {
   const axiosSecure = useAxiosSecure();
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
 
   const { data: tasksData = [], isPending } = useQuery({
     queryKey: ["tasks"],
@@ -33,7 +18,7 @@ export default function ProgressPage() {
     },
   });
 
-  // Filter tasks data based on employee and month
+  // filter tasks data based on employee, month, and year
   useEffect(() => {
     const filtered = tasksData.filter((task) => {
       const matchesEmployee = selectedEmployee
@@ -43,25 +28,49 @@ export default function ProgressPage() {
         ? new Date(task.date).toLocaleString("en-US", { month: "long" }) ===
           selectedMonth
         : true;
-      return matchesEmployee && matchesMonth;
+      const matchesYear = selectedYear
+        ? new Date(task.date).getFullYear().toString() === selectedYear
+        : true;
+      return matchesEmployee && matchesMonth && matchesYear;
     });
     setFilteredRecords(filtered);
-  }, [selectedEmployee, selectedMonth, tasksData]);
+  }, [selectedEmployee, selectedMonth, selectedYear, tasksData]);
 
-  // Extract unique employee names for the dropdown
+  // dynamic employee name for the dropdown
   const employeeNames = [
     ...new Set(tasksData.map((task) => task.employee_name)),
   ];
 
-  if (isPending) return <LoadingSpinner></LoadingSpinner>;
+  // dynamic years from the data
+  const years = [
+    ...new Set(tasksData.map((task) => new Date(task.date).getFullYear())),
+  ];
+
+  // months for dropdown
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  if (isPending) return <LoadingSpinner />;
 
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold text-text mb-6">Progress Records</h2>
 
-      {/* Filters */}
+      {/* filters */}
       <div className="flex flex-wrap gap-4 mb-6">
-        {/* Employee Name Filter */}
+        {/* employee name */}
         <div>
           <label
             htmlFor="employee"
@@ -84,7 +93,7 @@ export default function ProgressPage() {
           </select>
         </div>
 
-        {/* Month Filter */}
+        {/* month filter */}
         <div>
           <label
             htmlFor="month"
@@ -106,9 +115,32 @@ export default function ProgressPage() {
             ))}
           </select>
         </div>
+
+        {/* year filter */}
+        <div>
+          <label
+            htmlFor="year"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Filter by Year
+          </label>
+          <select
+            id="year"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+          >
+            <option value="">All Years</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {/* Table */}
+      {/* table */}
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse border border-gray-300">
           <thead className="bg-gray-100">
