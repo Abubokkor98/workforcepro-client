@@ -20,29 +20,6 @@ export default function Payroll() {
     },
   });
 
-  // Handle payment
-  const handlePay = async (employee) => {
-    const currentDate = format(new Date(), "yyyy-MM-dd");
-    const updatedPayment = {
-      paymentStatus: "paid",
-      payingDate: currentDate,
-    };
-
-    try {
-      const { data: updated } = await axiosSecure.patch(
-        `/payments/${employee._id}`,
-        updatedPayment
-      );
-
-      if (updated.modifiedCount > 0) {
-        toast.success(`${employee.name} has been successfully paid.`);
-        refetch();
-      }
-    } catch (error) {
-      toast.error("Failed to update payment status");
-    }
-  };
-
   if (isPending) {
     return <LoadingSpinner></LoadingSpinner>;
   }
@@ -102,14 +79,11 @@ export default function Payroll() {
                       Paid
                     </button>
                   ) : (
-                    <button
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                      onClick={() => handlePay(employee)}
-                    >
-                      Pay
-                    </button>
-                    // <Link to={`/dashboard/payroll/${employee._id}`}>
-                    // </Link>
+                    <Link to={`/dashboard/payroll/${employee._id}`}>
+                      <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                        Pay
+                      </button>
+                    </Link>
                   )}
                 </td>
               </tr>

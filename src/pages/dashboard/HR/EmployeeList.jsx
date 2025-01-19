@@ -146,6 +146,7 @@ export default function EmployeeList() {
       month: data.month,
       year: data.year,
       paymentStatus: "pending",
+      transactionId: "",
       payingDate: "",
     };
     // post payment request to the db
