@@ -5,7 +5,6 @@ import Modal from "react-modal";
 import { useForm, Controller } from "react-hook-form";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import useAuth from "../../../customHooks/useAuth";
-import useAxiosPublic from "../../../customHooks/useAxiosPublic";
 import useTasks from "../../../customHooks/useTasks";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
@@ -14,11 +13,16 @@ import toast from "react-hot-toast";
 Modal.setAppElement("#root"); // Ensure accessibility
 
 export default function WorkSheet() {
-  // Main form state
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [sortedTasks, loading, refetch] = useTasks();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  // form state
   const mainForm = useForm();
   const { register, handleSubmit, control, reset } = mainForm;
-
-  // Modal form state
+  // modal form state
   const modalForm = useForm();
   const {
     register: modalRegister,
@@ -27,14 +31,7 @@ export default function WorkSheet() {
     setValue,
   } = modalForm;
 
-  const { user } = useAuth();
-  const axiosPublic = useAxiosPublic();
-  const axiosSecure = useAxiosSecure();
-  const [tasks, loading, refetch] = useTasks();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
-
-  // Main form submit handler
+  // main form handler
   const onSubmit = async (data) => {
     const newTask = {
       employee_name: user.displayName,
@@ -50,7 +47,7 @@ export default function WorkSheet() {
     }
   };
 
-  // Delete handler
+  // task elete handler
   const handleDeleteTask = async (task) => {
     const { data } = await axiosSecure.delete(`/tasks/${task._id}`);
     if (data.deletedCount > 0) {
@@ -59,7 +56,7 @@ export default function WorkSheet() {
     }
   };
 
-  // Open modal and pre-fill fields
+  // open modal
   const openEditModal = (task) => {
     setSelectedTask(task);
     setValue("edit_task", task.task);
@@ -68,7 +65,7 @@ export default function WorkSheet() {
     setIsModalOpen(true);
   };
 
-  // Modal form submit handler
+  // modal form handler
   const handleEditSubmit = async (data) => {
     const updatedTask = {
       task: data.edit_task,
@@ -94,7 +91,7 @@ export default function WorkSheet() {
     <div>
       <h2 className="text-2xl font-bold mb-4">Work Sheet</h2>
 
-      {/* Main Form */}
+      {/*Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={`flex items-center gap-4 mb-6`}
@@ -157,7 +154,7 @@ export default function WorkSheet() {
           </tr>
         </thead>
         <tbody>
-          {tasks.map((task) => (
+          {sortedTasks.map((task) => (
             <tr
               key={task._id}
               className="odd:bg-background even:bg-accent/10 text-center"
@@ -185,7 +182,7 @@ export default function WorkSheet() {
         </tbody>
       </table>
 
-      {/* Modal */}
+      {/* modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}

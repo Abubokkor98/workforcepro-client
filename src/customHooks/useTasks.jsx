@@ -5,6 +5,7 @@ import useAxiosSecure from "./useAxiosSecure";
 export default function useTasks() {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+
   const {
     data: tasks = [],
     isPending: loading,
@@ -17,5 +18,13 @@ export default function useTasks() {
     },
     enabled: !!user?.email,
   });
-  return [tasks, loading, refetch];
+
+  // sorting tasks by date
+  const sortedTasks = tasks.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB - dateA;
+  });
+
+  return [sortedTasks, loading, refetch];
 }
