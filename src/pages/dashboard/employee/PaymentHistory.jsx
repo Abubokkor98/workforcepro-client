@@ -3,32 +3,53 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import useAuth from "../../../customHooks/useAuth";
 import { useState } from "react";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function PaymentHistory() {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 5; // Items per page
+  const itemsPerPage = 5;
 
-  // Fetch payment data
+  //fetch data
   const { data: payments = [], isPending } = useQuery({
     queryKey: ["payments", user?.email],
     queryFn: async () => {
-      // Ensure the hook runs even if email is not present
       const response = await axiosSecure.get(`/payments/email/${user?.email}`);
       return response.data;
     },
   });
 
-  // Show loading state
   if (isPending) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner></LoadingSpinner>;
   }
 
-  // Pagination state
+  //descending sort functionality
+  const sortedPayments = [...payments].sort((a, b) => {
+    if (b.year !== a.year) {
+      return b.year - a.year;
+    }
+    // if the years are same
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return months.indexOf(b.month) - months.indexOf(a.month);
+  });
 
-  const pageCount = Math.ceil(payments.length / itemsPerPage);
-  const displayedPayments = payments.slice(
+  // Pagination
+  const pageCount = Math.ceil(sortedPayments.length / itemsPerPage);
+  const displayedPayments = sortedPayments.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
@@ -48,7 +69,7 @@ export default function PaymentHistory() {
               <th className="px-6 py-3">Amount</th>
               <th className="px-6 py-3">Status</th>
               <th className="px-6 py-3">Transaction ID</th>
-              <th className="px-6 py-3">Paying date</th>
+              <th className="px-6 py-3">Paying Date</th>
             </tr>
           </thead>
           <tbody>
@@ -57,14 +78,14 @@ export default function PaymentHistory() {
                 key={payment._id}
                 className={`border-b ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
-                } `}
+                }`}
               >
                 <td className="px-6 py-3">
                   {payment.month}, {payment.year}
                 </td>
                 <td className="px-6 py-3">${payment.salary}</td>
                 <td className="px-6 py-3">
-                  {payment.paymentStatus === "paid" ? "Paid " : "Not Paid"}
+                  {payment.paymentStatus === "paid" ? "Paid" : "Not Paid"}
                 </td>
                 <td className="px-6 py-3">{payment.transactionId || "N/A"}</td>
                 <td className="px-6 py-3">{payment.payingDate}</td>
