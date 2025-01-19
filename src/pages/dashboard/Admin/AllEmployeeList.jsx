@@ -40,6 +40,7 @@ export default function AllEmployeeList() {
     }
   };
 
+  // handle fire
   const handleFire = async (user) => {
     const updatedUser = {
       isFired: true,
@@ -191,7 +192,7 @@ export default function AllEmployeeList() {
         </table>
       </div>
 
-      {/* Fire Modal */}
+      {/* fire modal */}
       <Modal
         isOpen={fireModalIsOpen}
         onRequestClose={handleCloseFireModal}
@@ -220,7 +221,7 @@ export default function AllEmployeeList() {
         </div>
       </Modal>
 
-      {/* Adjust Salary Modal */}
+      {/* adjust salary modal */}
       <Modal
         isOpen={salaryModalIsOpen}
         onRequestClose={handleCloseSalaryModal}

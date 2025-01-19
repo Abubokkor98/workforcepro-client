@@ -39,6 +39,17 @@ export default function Payroll() {
     return <LoadingSpinner />;
   }
 
+  // sort payroll records with unpaid employees first
+  const sortedPayroll = payroll.sort((a, b) => {
+    if (a.paymentStatus === "paid" && b.paymentStatus !== "paid") {
+      return 1;
+    }
+    if (a.paymentStatus !== "paid" && b.paymentStatus === "paid") {
+      return -1;
+    }
+    return 0;
+  });
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold text-text mb-6">Employee Payroll</h2>
@@ -69,7 +80,7 @@ export default function Payroll() {
             </tr>
           </thead>
           <tbody>
-            {payroll.map((employee) => (
+            {sortedPayroll.map((employee) => (
               <tr key={employee._id} className="even:bg-gray-50">
                 <td className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
                   {employee.name}
@@ -109,7 +120,7 @@ export default function Payroll() {
         </table>
       </div>
 
-      {/* Payment Modal */}
+      {/* payment modal */}
       <Elements stripe={stripePromise}>
         <PaymentModal
           isOpen={isModalOpen}
