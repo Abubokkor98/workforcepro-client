@@ -73,7 +73,7 @@ const router = createBrowserRouter([
         // element: <DashBoard></DashBoard>
       },
       {
-        path: "employee-details/:id",
+        path: "employee-details/:email",
         element: (
           <HrRoutes>
             <EmployeeDetails></EmployeeDetails>

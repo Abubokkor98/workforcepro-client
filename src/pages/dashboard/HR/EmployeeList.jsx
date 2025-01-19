@@ -49,6 +49,37 @@ export default function EmployeeList() {
     }
   };
 
+  // Modal Handling
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEmployeeForModal(null);
+    reset();
+  };
+
+  const handlePay = async (data) => {
+    const newPayment = {
+      name: employeeForModal.name,
+      email: employeeForModal.email,
+      salary: employeeForModal.salary,
+      month: data.month,
+      year: data.year,
+      paymentStatus: "pending",
+      transactionId: "",
+      payingDate: "",
+    };
+    // post payment request to the db
+    const { data: payRequest } = await axiosSecure.post(
+      "/payments",
+      newPayment
+    );
+    // console.log(payRequest);
+    if (payRequest.insertedId) {
+      toast.success("Payment request send to Admin");
+    }
+    closeModal();
+  };
+
+
   // Table Columns Definition
   const columns = useMemo(
     () => [
@@ -100,8 +131,8 @@ export default function EmployeeList() {
             }`}
             onClick={() => {
               if (row.original.isVerified) {
-                setEmployeeForModal(row.original); // Set employee for modal
-                setIsModalOpen(true); // Open modal
+                setEmployeeForModal(row.original);
+                setIsModalOpen(true);
               }
             }}
             disabled={!row.original.isVerified}
@@ -113,7 +144,7 @@ export default function EmployeeList() {
       {
         header: "Details",
         cell: ({ row }) => (
-          <Link to={`/dashboard/employee-details/${row.original._id}`}>
+          <Link to={`/dashboard/employee-details/${row.original.email}`}>
             <button className="px-4 py-2 bg-accent text-white rounded-md">
               Details
             </button>
@@ -123,43 +154,12 @@ export default function EmployeeList() {
     ],
     []
   );
-
-  // React Table Instance
-  const table = useReactTable({
-    data: employeeData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  // Modal Handling
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setEmployeeForModal(null);
-    reset();
-  };
-
-  const handlePay = async (data) => {
-    const newPayment = {
-      name: employeeForModal.name,
-      email: employeeForModal.email,
-      salary: employeeForModal.salary,
-      month: data.month,
-      year: data.year,
-      paymentStatus: "pending",
-      transactionId: "",
-      payingDate: "",
-    };
-    // post payment request to the db
-    const { data: payRequest } = await axiosSecure.post(
-      "/payments",
-      newPayment
-    );
-    // console.log(payRequest);
-    if (payRequest.insertedId) {
-      toast.success("Payment request send to Admin");
-    }
-    closeModal();
-  };
+    // React Table Instance
+    const table = useReactTable({
+      data: employeeData,
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+    });
 
   if (isPending) {
     return <LoadingSpinner />;
