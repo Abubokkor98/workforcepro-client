@@ -1,12 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
-import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/LoadingSpinner";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import PaymentModal from "./PaymentModal";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gatway_PK);
 
 export default function Payroll() {
   const axiosSecure = useAxiosSecure();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const {
     data: payroll = [],
@@ -20,9 +25,20 @@ export default function Payroll() {
     },
   });
 
+  const openModal = (employee) => {
+    setSelectedEmployee(employee);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEmployee(null);
+  };
+
   if (isPending) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return <LoadingSpinner />;
   }
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-2xl font-bold text-text mb-6">Employee Payroll</h2>
@@ -79,11 +95,12 @@ export default function Payroll() {
                       Paid
                     </button>
                   ) : (
-                    <Link to={`/dashboard/payroll/${employee._id}`}>
-                      <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                        Pay
-                      </button>
-                    </Link>
+                    <button
+                      onClick={() => openModal(employee)}
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                    >
+                      Pay
+                    </button>
                   )}
                 </td>
               </tr>
@@ -91,6 +108,16 @@ export default function Payroll() {
           </tbody>
         </table>
       </div>
+
+      {/* Payment Modal */}
+      <Elements stripe={stripePromise}>
+        <PaymentModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          employee={selectedEmployee}
+          refetch={refetch}
+        />
+      </Elements>
     </div>
   );
 }
