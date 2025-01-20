@@ -3,12 +3,12 @@ import bannerImg from "../assets/banner-img.png";
 
 export default function Banner() {
   return (
-    <div className="py-16 px-6 md:px-16">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+    <div className="bg-gray-400 mt-6 py-16 px-6 md:px-16">
+      <div className="container mx-auto flex flex-col md:flex-row items-center  justify-between gap-12">
         {/* Left Section */}
-        <div className="text-center md:text-left max-w-xl">
+        <div className="text-center w-7/12 md:text-left max-w-xl">
           <Fade direction="left" triggerOnce>
-            <h1 className="text-4xl font-bold leading-snug text-primary">
+            <h1 className="text-4xl font-bold leading-snug text-white">
               Empowering Employees, Elevating Businesses
             </h1>
             <p className="mt-6 text-lg text-text">
@@ -33,9 +33,8 @@ export default function Banner() {
 
         {/* Right Section */}
         <Fade direction="right" triggerOnce>
-          <div className="max-w-md w-full flex justify-center">
-            <div className="relative">
-              <div className="absolute inset-0 bg-accent/10 rounded-lg blur-lg"></div>
+          <div className="w-full rounded-lg">
+            <div>
               <img
                 src={bannerImg}
                 alt="Teamwork Success"

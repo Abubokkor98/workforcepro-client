@@ -3,6 +3,8 @@ import Banner from "../../components/Banner";
 import { Helmet } from "react-helmet-async";
 import OurServices from "../../components/OurServices";
 import DashBoard from "../../test/DashBoard";
+import Testimonials from "../../components/Testimonials";
+import Achievements from "../../components/Achievements";
 
 export default function Home() {
   return (
@@ -13,6 +15,8 @@ export default function Home() {
       <Banner></Banner>
       <OurServices></OurServices>
       {/* <DashBoard></DashBoard> */}
+      <Testimonials></Testimonials>
+      <Achievements></Achievements>
     </div>
   );
 }

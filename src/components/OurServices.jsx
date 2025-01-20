@@ -1,13 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaUserTie, FaTasks, FaMoneyCheckAlt, FaChartLine } from "react-icons/fa";
+import {
+  FaUserTie,
+  FaTasks,
+  FaMoneyCheckAlt,
+  FaChartLine,
+  FaDatabase,
+  FaUsers,
+  FaFileContract,
+  FaChartPie,
+} from "react-icons/fa";
 
 const services = [
   {
     id: 1,
     title: "Employee Management",
     description:
-      "Efficiently manage employee records, performance, and payroll with our streamlined tools.",
+      "Organize and oversee employee data, schedules, and profiles seamlessly through intuitive tools tailored for scalability.",
     icon: <FaUserTie />,
     bgColor: "bg-primary",
   },
@@ -15,7 +24,7 @@ const services = [
     id: 2,
     title: "HR Solutions",
     description:
-      "Simplify HR processes, recruitment, and onboarding with advanced solutions.",
+      "Streamline HR operations, including recruitment, training, and onboarding, to enhance workforce efficiency and satisfaction.",
     icon: <FaTasks />,
     bgColor: "bg-secondary",
   },
@@ -23,17 +32,49 @@ const services = [
     id: 3,
     title: "Payroll Processing",
     description:
-      "Automate salary processing and ensure timely and accurate payouts.",
+      "Simplify payroll management with automated calculations, tax compliance, and secure payment processing.",
     icon: <FaMoneyCheckAlt />,
-    bgColor: "bg-accent",
+    bgColor: "bg-gray-500",
   },
   {
     id: 4,
     title: "Performance Tracking",
     description:
-      "Monitor employee performance and provide valuable feedback for growth.",
+      "Track employee performance with detailed analytics and feedback tools to foster growth and development.",
     icon: <FaChartLine />,
-    bgColor: "bg-text",
+    bgColor: "bg-accent",
+  },
+  {
+    id: 5,
+    title: "Team Collaboration",
+    description:
+      "Boost teamwork with integrated collaboration tools designed for real-time communication and project management.",
+    icon: <FaUsers />,
+    bgColor: "bg-secondary",
+  },
+  {
+    id: 6,
+    title: "Workforce Analytics",
+    description:
+      "Leverage powerful analytics to make data-driven decisions and optimize workforce productivity.",
+    icon: <FaDatabase />,
+    bgColor: "bg-primary",
+  },
+  {
+    id: 7,
+    title: "Compliance Management",
+    description:
+      "Ensure regulatory compliance with built-in tools for policy management, audits, and reporting.",
+    icon: <FaFileContract />,
+    bgColor: "bg-accent",
+  },
+  {
+    id: 8,
+    title: "Custom Reporting",
+    description:
+      "Generate detailed, customizable reports to gain insights into workforce trends and metrics.",
+    icon: <FaChartPie />,
+    bgColor: "bg-gray-500",
   },
 ];
 
