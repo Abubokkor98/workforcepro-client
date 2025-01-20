@@ -9,8 +9,7 @@ import useTasks from "../../../customHooks/useTasks";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import toast from "react-hot-toast";
-
-Modal.setAppElement("#root"); // Ensure accessibility
+import { Helmet } from "react-helmet-async";
 
 export default function WorkSheet() {
   const { user } = useAuth();
@@ -89,6 +88,9 @@ export default function WorkSheet() {
 
   return (
     <div>
+      <Helmet>
+        <title>Work Sheet | WorkForce Pro</title>
+      </Helmet>
       <h2 className="text-2xl font-bold mb-4">Work Sheet</h2>
 
       {/*Form */}

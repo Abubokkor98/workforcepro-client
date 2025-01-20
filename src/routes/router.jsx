@@ -4,7 +4,6 @@ import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
-import ContactUs from "../pages/contact/ContactUs";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import WorkSheet from "../pages/dashboard/employee/WorkSheet";
 import PaymentHistory from "../pages/dashboard/employee/PaymentHistory";
@@ -18,6 +17,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoutes from "./AdminRoutes";
 import EmployeeRoutes from "./EmployeeRoutes";
 import HrRoutes from "./HrRoutes";
+import ContactPage from "../pages/contact/ContactPage";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "contact-us",
-        element: <ContactUs></ContactUs>,
+        element: <ContactPage></ContactPage>,
       },
     ],
   },

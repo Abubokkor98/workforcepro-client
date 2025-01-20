@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { Helmet } from "react-helmet-async";
 
 export default function ProgressPage() {
   const axiosSecure = useAxiosSecure();
@@ -66,6 +67,7 @@ export default function ProgressPage() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <Helmet>Progress | WorkForce Pro</Helmet>
       <h2 className="text-2xl font-bold text-text mb-6">Progress Records</h2>
 
       {/* filters */}

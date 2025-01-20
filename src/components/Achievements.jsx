@@ -3,24 +3,58 @@ import { FaRegThumbsUp, FaUsers, FaUserCog, FaTrophy } from "react-icons/fa";
 
 export default function Achievements() {
   const stats = [
-    { id: 1, value: "10+", label: "Years of Experience", icon: <FaRegThumbsUp />, bgColor: "bg-primary" },
-    { id: 2, value: "100+", label: "Happy Clients", icon: <FaUsers />, bgColor: "bg-secondary" },
-    { id: 3, value: "50K+", label: "Employees Managed", icon: <FaUserCog />, bgColor: "bg-accent" },
-    { id: 4, value: "5", label: "Industry Awards", icon: <FaTrophy />, bgColor: "bg-gray-500" },
+    {
+      id: 1,
+      value: "10+",
+      label: "Years of Experience",
+      icon: <FaRegThumbsUp />,
+      bgColor: "bg-primary",
+    },
+    {
+      id: 2,
+      value: "100+",
+      label: "Happy Clients",
+      icon: <FaUsers />,
+      bgColor: "bg-secondary",
+    },
+    {
+      id: 3,
+      value: "50K+",
+      label: "Employees Managed",
+      icon: <FaUserCog />,
+      bgColor: "bg-accent",
+    },
+    {
+      id: 4,
+      value: "5",
+      label: "Industry Awards",
+      icon: <FaTrophy />,
+      bgColor: "bg-gray-500",
+    },
   ];
 
   return (
-    <section className="py-16 bg-background text-text">
-      <div className="container mx-auto px-4 text-center">
+    <section className="py-16 bg-background">
+      <div className="mx-4 lg:mx-14 text-center">
         {/* Section Heading */}
         <motion.h2
-          className="text-primary text-4xl font-bold mb-12"
+          className="text-primary text-3xl md:text-4xl font-bold mb-6"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Our Achievements
+          Proud Moments That Define Us
         </motion.h2>
+        <motion.p
+          className="text-lg text-secondary mb-6 md:mb-12 md:w-10/12 lg:w-7/12 mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          Over the years, we’ve reached incredible milestones that reflect our
+          unwavering commitment to innovation and excellence. These achievements
+          inspire us to keep striving for the extraordinary.
+        </motion.p>
 
         {/* Achievements Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">

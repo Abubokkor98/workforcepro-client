@@ -4,6 +4,7 @@ import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import useAuth from "../../../customHooks/useAuth";
 import { useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { Helmet } from "react-helmet-async";
 
 export default function PaymentHistory() {
   const axiosSecure = useAxiosSecure();
@@ -60,6 +61,9 @@ export default function PaymentHistory() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <Helmet>
+        <title>Payment History | WorkForce Pro</title>
+      </Helmet>
       <h2 className="text-2xl font-bold text-text mb-4">Payment History</h2>
       <div className="overflow-x-auto shadow-md rounded-lg">
         <table className="min-w-full bg-white rounded-lg shadow-md">

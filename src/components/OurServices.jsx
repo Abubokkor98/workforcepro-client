@@ -80,17 +80,27 @@ const services = [
 
 export default function OurServices() {
   return (
-    <section className="bg-background py-16">
-      <div className="container mx-auto px-4 text-center">
+    <section className="bg-background  py-16">
+      <div className="mx-4 lg:mx-14 text-center">
         {/* Section Heading */}
         <motion.h2
-          className="text-primary text-4xl font-bold mb-12"
+          className="text-primary md:w-10/12 lg:w-6/12 mx-auto text-3xl md:text-4xl font-bold mb-6"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Our Services
+          Efficient Workforce Management at Your Fingertips
         </motion.h2>
+        <motion.p
+          className="text-lg text-secondary mb-6 md:mb-12 md:w-10/12 lg:w-7/12 mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          Manage your team effortlessly with WorkForce Pro. From tracking tasks
+          to handling payroll, our platform makes employee management simple,
+          efficient, and secure. Everything you need, all in one place!
+        </motion.p>
 
         {/* Services Grid */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">

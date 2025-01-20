@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 
-const ContactUs = () => {
+const ContactPage = () => {
   const [formData, setFormData] = useState({ email: "", message: "" });
   const [status, setStatus] = useState("");
 
@@ -13,22 +14,27 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus("Message sent successfully!");
-    setTimeout(() => setStatus(""), 3000); // Reset status after 3 seconds
-    setFormData({ email: "", message: "" }); // Clear form
+    setTimeout(() => setStatus(""), 3000);
+    setFormData({ email: "", message: "" });
   };
 
   return (
-    <>
-     {/* Section Header */}
-     <div className="text-center mb-12">
-          <h2 className="text-primary text-4xl font-bold mb-4">Contact Us</h2>
-          <p className="text-secondary">
-            We'd love to hear from you! Please feel free to reach out with any
-            feedback or inquiries.
-          </p>
-        </div>
+    <div className=" py-10">
+      <Helmet>
+        <title>Contact | WorkForce Pro</title>
+      </Helmet>
+      {/* Section Header */}
+      <div className="text-center max-w-4xl w-full mx-auto bg-white pt-4 rounded-t-lg">
+        <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6">
+          Let’s Start a Conversation
+        </h2>
+        <p className="text-secondary pb-6 md:pb-8 md:w-10/12 lg:w-7/12 mx-auto border-b">
+          We value your feedback and inquiries. Whether you’re looking for
+          support or simply want to connect, we’re just a message away.
+        </p>
+      </div>
       <div className="bg-gray-100 flex items-center justify-center">
-        <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg">
+        <div className="max-w-4xl w-full bg-white rounded-b-lg shadow-lg">
           {/* Content */}
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Address Section */}
@@ -104,8 +110,8 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ContactUs;
+export default ContactPage;

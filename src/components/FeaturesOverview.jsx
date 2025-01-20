@@ -41,12 +41,15 @@ const FeaturesOverview = () => {
   };
 
   return (
-    <section className="bg-gray-100 py-16 px-6">
+    <section className="bg-gray-100 py-16">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-primary text-4xl font-bold mb-10">
-          Platform Features
+        <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6">
+          Our Key Features
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <p className="text-lg text-secondary mb-6 md:mb-12">
+          Simplifying workforce management with powerful tools for every need.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ml-20 lg:ml-10">
           {features.map((feature) => (
             <ReactCardFlip
               key={feature.id}

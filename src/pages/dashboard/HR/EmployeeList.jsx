@@ -12,6 +12,7 @@ import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function EmployeeList() {
   const axiosSecure = useAxiosSecure();
@@ -166,6 +167,7 @@ export default function EmployeeList() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <Helmet>Employee List | WorkForce Pro</Helmet>
       <h2 className="text-2xl font-bold text-text mb-4">Employee List</h2>
 
       {/*table */}

@@ -1,13 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import Marquee from "react-fast-marquee";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
 
-// Testimonials data
 const testimonials = [
   {
     id: 1,
@@ -49,7 +43,6 @@ const testimonials = [
       "The payroll processing feature has saved us hours of work every month. Highly recommend their tools!",
     image: "https://i.ibb.co.com/cYsQCFb/6.jpg",
   },
-
   {
     id: 6,
     name: "Emily Davis",
@@ -62,59 +55,45 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-background py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 mx-4 lg:mx-14">
+      <div className=" shadow-md py-4">
         {/* Heading */}
-        <motion.h2
-          className="text-4xl font-bold text-text text-center mb-12"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Testimonials
-        </motion.h2>
+        <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6 text-center">
+        Trusted by Professionals
+        </h2>
+        <p className="text-lg text-secondary text-center mb-6 md:mb-12 md:w-10/12 lg:w-7/12 mx-auto">
+        Discover how WorkForce Pro has transformed workplaces across industries. Hear from our happy clients about their success stories and how our tools have made their workflows seamless and efficient.
+        </p>
 
-        {/* Swiper Slider */}
-        <Swiper
-          modules={[Pagination, Autoplay]}
-          spaceBetween={30}
-          slidesPerView={1}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          pagination={{ clickable: true }}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 4 },
-          }}
-          className="testimonials-slider"
+        {/* Marquee Slider */}
+        <Marquee
+          gradient={false}
+          speed={70}
+          pauseOnHover={false}
+          className="testimonials-marquee"
         >
           {testimonials.map((testimonial) => (
-            <SwiperSlide key={testimonial.id}>
-              <motion.div
-                className="flex flex-col items-center bg-background text-text shadow-lg rounded-lg p-6 text-center hover:shadow-xl transition-shadow duration-300 flex-grow"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-20 h-20 rounded-full mb-4 border-4 border-accent"
-                />
-                <h3 className="text-xl font-semibold text-text">
-                  {testimonial.name}
-                </h3>
-                <p className="text-sm italic text-secondary">
-                  {testimonial.title}
-                </p>
-                <p className="mt-4 text-primary flex-grow">
-                  {testimonial.feedback}
-                </p>
-              </motion.div>
-            </SwiperSlide>
+            <div
+              key={testimonial.id}
+              className="flex flex-col items-center w-64 bg-accent text-white rounded-lg p-6 mx-4 text-center"
+            >
+              <img
+                src={testimonial.image}
+                alt={testimonial.name}
+                className="w-20 h-20 rounded-full mb-4 border-4 border-accent"
+              />
+              <h3 className="text-xl font-semibold ">
+                {testimonial.name}
+              </h3>
+              <p className="text-sm italic text-white/90">
+                {testimonial.title}
+              </p>
+              <p className="mt-4 text-text/80">
+                {testimonial.feedback}
+              </p>
+            </div>
           ))}
-        </Swiper>
+        </Marquee>
       </div>
     </section>
   );

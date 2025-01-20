@@ -2,12 +2,11 @@ import React from "react";
 import Banner from "../../components/Banner";
 import { Helmet } from "react-helmet-async";
 import OurServices from "../../components/OurServices";
-import DashBoard from "../../test/DashBoard";
 import Testimonials from "../../components/Testimonials";
 import Achievements from "../../components/Achievements";
 import FAQ from "../../components/FAQ";
 import FeaturesOverview from "../../components/FeaturesOverview";
-import ContactUs from "../contact/ContactUs";
+import ContactUs from "../../components/ContactUs";
 
 export default function Home() {
   return (
@@ -18,9 +17,8 @@ export default function Home() {
       <Banner></Banner>
       <OurServices></OurServices>
       <FeaturesOverview></FeaturesOverview>
-      {/* <DashBoard></DashBoard> */}
-      <Testimonials></Testimonials>
       <Achievements></Achievements>
+      <Testimonials></Testimonials>
       <FAQ></FAQ>
       <ContactUs></ContactUs>
     </div>

@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import toast from "react-hot-toast";
 import useAuth from "../customHooks/useAuth";
 import { useState } from "react";
 
 export default function Navbar() {
   const { user, logoutUser, setUser } = useAuth();
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -21,21 +20,26 @@ export default function Navbar() {
       });
   };
 
+  const getNavLinkClass = ({ isActive }) =>
+    isActive
+      ? "text-lg px-2 py-1 text-white font-semibold border-b-2 border-accent"
+      : "text-lg px-2 py-1 text-white font-semibold";
+
   return (
-    <nav className="bg-primary text-white sticky top-0 z-50 px-4 py-3 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-primary text-background sticky top-0 z-50 px-4 py-3 shadow-md">
+      <div className="lg:mx-10 flex justify-between items-center">
         {/* Logo */}
         <div className="logo">
-          <Link to="/" className="text-2xl font-bold text-white">
+          <NavLink to="/" className="text-2xl font-bold text-background">
             WorkForce Pro
-          </Link>
+          </NavLink>
         </div>
 
         {/* Hamburger Menu Icon for Mobile */}
         <div className="sm:hidden">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-text focus:outline-none"
+            className="text-background focus:outline-none"
           >
             {menuOpen ? (
               <svg
@@ -98,18 +102,14 @@ export default function Navbar() {
           </button>
           <ul className="mt-12 space-y-4 px-6">
             <li>
-              <Link
-                to="/"
-                className="text-lg text-primary hover:text-accent transition"
-                onClick={() => setMenuOpen(false)}
-              >
+              <Link to="/" className="text-lg px-4 py-2 text-primary font-semibold" onClick={() => setMenuOpen(false)}>
                 Home
               </Link>
             </li>
             <li>
               <Link
                 to="/contact-us"
-                className="text-lg text-primary hover:text-accent transition"
+                className="text-lg px-4 py-2 text-primary font-semibold"
                 onClick={() => setMenuOpen(false)}
               >
                 Contact Us
@@ -120,7 +120,7 @@ export default function Navbar() {
                 <li>
                   <Link
                     to="/dashboard"
-                    className="text-lg text-primary hover:text-accent transition"
+                    className="text-lg px-4 py-2 text-primary font-semibold"
                     onClick={() => setMenuOpen(false)}
                   >
                     Dashboard
@@ -128,7 +128,7 @@ export default function Navbar() {
                 </li>
                 <li>
                   <button
-                    className="block text-lg text-text hover:text-primary"
+                    className="block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
                     onClick={() => {
                       handleLogout();
                       setMenuOpen(false);
@@ -141,22 +141,22 @@ export default function Navbar() {
             ) : (
               <>
                 <li>
-                  <Link
+                  <NavLink
                     to="/auth/login"
                     className="block text-lg bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary"
                     onClick={() => setMenuOpen(false)}
                   >
                     Login
-                  </Link>
+                  </NavLink>
                 </li>
                 <li>
-                  <Link
+                  <NavLink
                     to="/auth/register"
                     className="block text-lg bg-secondary text-white px-4 py-2 rounded-md hover:bg-primary"
                     onClick={() => setMenuOpen(false)}
                   >
                     Register
-                  </Link>
+                  </NavLink>
                 </li>
               </>
             )}
@@ -165,17 +165,17 @@ export default function Navbar() {
 
         {/* Navbar Links for Medium and Large Devices */}
         <div className="hidden sm:flex sm:items-center sm:gap-6">
-          <Link to="/" className="text-lg hover:text-accent transition">
+          <NavLink to="/" className={getNavLinkClass}>
             Home
-          </Link>
-          <Link to="/contact-us" className="text-lg hover:text-accent transition">
+          </NavLink>
+          <NavLink to="/contact-us" className={getNavLinkClass}>
             Contact Us
-          </Link>
+          </NavLink>
           {user ? (
             <>
-              <Link to="/dashboard" className="text-lg hover:text-accent transition">
+              <NavLink to="/dashboard" className={getNavLinkClass}>
                 Dashboard
-              </Link>
+              </NavLink>
               <div className="relative">
                 <img
                   src={user.photoURL}
@@ -184,10 +184,10 @@ export default function Navbar() {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 />
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded-md shadow-lg">
+                  <div className="absolute right-0 mt-2 w-40 rounded-lg shadow-lg bg-white">
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                      className="block w-full bg-red-500 text-white text-center px-4 py-2 rounded-lg hover:bg-red-600 transition"
                     >
                       Logout
                     </button>
@@ -197,18 +197,18 @@ export default function Navbar() {
             </>
           ) : (
             <div className="flex gap-4">
-              <Link
+              <NavLink
                 to="/auth/login"
                 className="bg-accent text-white px-4 py-2 rounded-md hover:bg-secondary"
               >
                 Login
-              </Link>
-              <Link
+              </NavLink>
+              <NavLink
                 to="/auth/register"
                 className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-accent"
               >
                 Register
-              </Link>
+              </NavLink>
             </div>
           )}
         </div>
