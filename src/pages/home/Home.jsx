@@ -7,6 +7,7 @@ import Testimonials from "../../components/Testimonials";
 import Achievements from "../../components/Achievements";
 import FAQ from "../../components/FAQ";
 import FeaturesOverview from "../../components/FeaturesOverview";
+import ContactUs from "../contact/ContactUs";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <Testimonials></Testimonials>
       <Achievements></Achievements>
       <FAQ></FAQ>
+      <ContactUs></ContactUs>
     </div>
   );
 }
