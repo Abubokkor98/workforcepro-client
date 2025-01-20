@@ -22,8 +22,8 @@ export default function FAQ() {
     },
     { 
       id: 4, 
-      question: "Can I integrate WorkForce Pro with other tools?", 
-      answer: "Yes, WorkForce Pro allows for integrations with popular tools like Google Workspace, Microsoft Office, and various HR platforms through APIs." 
+      question: "What industries is this tool best suited for?", 
+      answer: "WorkForce Pro is ideal for industries such as human resources, retail, manufacturing, healthcare, technology, and professional services, where employee management, compliance, and performance tracking are essential." 
     },
     { 
       id: 5, 

@@ -6,6 +6,7 @@ import DashBoard from "../../test/DashBoard";
 import Testimonials from "../../components/Testimonials";
 import Achievements from "../../components/Achievements";
 import FAQ from "../../components/FAQ";
+import FeaturesOverview from "../../components/FeaturesOverview";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       </Helmet>
       <Banner></Banner>
       <OurServices></OurServices>
+      <FeaturesOverview></FeaturesOverview>
       {/* <DashBoard></DashBoard> */}
       <Testimonials></Testimonials>
       <Achievements></Achievements>
