@@ -5,6 +5,7 @@ import OurServices from "../../components/OurServices";
 import DashBoard from "../../test/DashBoard";
 import Testimonials from "../../components/Testimonials";
 import Achievements from "../../components/Achievements";
+import FAQ from "../../components/FAQ";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       {/* <DashBoard></DashBoard> */}
       <Testimonials></Testimonials>
       <Achievements></Achievements>
+      <FAQ></FAQ>
     </div>
   );
 }
