@@ -96,12 +96,13 @@ export default function WorkSheet() {
       {/*Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={`flex items-center gap-4 mb-6`}
+        className={`flex flex-wrap items-center gap-4 p-4 lg:flex-nowrap lg:gap-6 mb-6`}
       >
+        {/* Task Select */}
         <select
           {...register("task", { required: true })}
           defaultValue={""}
-          className="border p-2 rounded"
+          className="border p-2 rounded text-sm w-full max-w-md lg:w-auto"
           disabled={isModalOpen}
         >
           <option disabled value={""}>
@@ -113,14 +114,16 @@ export default function WorkSheet() {
           <option>Paper-work</option>
         </select>
 
+        {/* Hours Worked Input */}
         <input
           type="number"
           {...register("work_duration", { required: true })}
           placeholder="Hours Worked"
-          className="border p-2 rounded"
+          className="border p-2 rounded text-sm w-full max-w-md lg:w-auto"
           disabled={isModalOpen}
         />
 
+        {/* Date Picker */}
         <Controller
           name="date"
           control={control}
@@ -130,15 +133,16 @@ export default function WorkSheet() {
             <DatePicker
               selected={field.value}
               onChange={(date) => field.onChange(date)}
-              className="border p-2 rounded"
+              className="border p-2 rounded text-sm w-full max-w-md lg:w-auto"
               disabled={isModalOpen}
             />
           )}
         />
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-primary text-white px-4 py-2 rounded"
+          className="bg-primary text-white px-4 py-2 rounded w-full max-w-md lg:w-auto"
           disabled={isModalOpen}
         >
           Add

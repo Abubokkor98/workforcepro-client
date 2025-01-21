@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import avatar from "../../../assets/default-avatar.png";
+import { Helmet } from "react-helmet-async";
 
 export default function AllEmployeeList() {
   const axiosSecure = useAxiosSecure();
@@ -97,6 +98,9 @@ export default function AllEmployeeList() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <Helmet>
+        <title>Verified Employees | WorkForce Pro</title>
+      </Helmet>
       <h2 className="text-2xl font-bold text-text mb-6">
         All Verified Employees
       </h2>
@@ -196,87 +200,82 @@ export default function AllEmployeeList() {
       ) : (
         // Card Grid View
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {employees.map((emp) => (
-    <div
-      key={emp._id}
-      className="border border-gray-300 p-4 rounded-lg shadow-lg hover:shadow-xl transition"
-    >
-      {/* Employee Image */}
-      <div className="mb-4 flex justify-center">
-        <img
-          src={emp.photo || avatar}
-          alt={`${emp.name}'s profile`}
-          className="w-24 h-24 rounded-full object-cover shadow-md"
-        />
-      </div>
+          {employees.map((emp) => (
+            <div
+              key={emp._id}
+              className="border border-gray-300 p-4 rounded-lg shadow-lg hover:shadow-xl transition"
+            >
+              <div className="mb-4 flex justify-center">
+                <img
+                  src={emp.photo || avatar}
+                  alt={`${emp.name}'s profile`}
+                  className="w-24 h-24 rounded-full object-cover shadow-md"
+                />
+              </div>
 
-      {/* Employee Information */}
-      <h3 className="font-semibold text-lg text-center">{emp.name}</h3>
-      <p
-        className={`text-center font-medium ${
-          emp.role === "HR" ? "text-green-500" : "text-blue-500"
-        }`}
-      >
-        {emp.role === "HR" ? "HR" : "Employee"}
-      </p>
-      <p className="text-center text-sm text-gray-600">
-        <span className="font-bold">Designation:</span> {emp.designation}
-      </p>
-
-      <p className="text-center text-sm text-gray-600">
-        <span className="font-bold">Salary:</span> ${emp.salary}
-      </p>
-
-      {/* Action Buttons */}
-      <div className="mt-4 flex justify-between gap-2">
-        {emp.isFired ? (
-          <span className="text-red-500 italic">Fired</span>
-        ) : (
-          <>
-            {emp.role !== "HR" && (
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-                onClick={() => handleMakeHR(emp)}
+              <h3 className="font-semibold text-lg text-center">{emp.name}</h3>
+              <p
+                className={`text-center font-medium ${
+                  emp.role === "HR" ? "text-green-500" : "text-blue-500"
+                }`}
               >
-                Make HR
-              </button>
-            )}
+                {emp.role === "HR" ? "HR" : "Employee"}
+              </p>
+              <p className="text-center text-sm text-gray-600">
+                <span className="font-bold">Designation:</span>{" "}
+                {emp.designation}
+              </p>
 
-            {emp.role !== "HR" && (
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-                onClick={() => handleOpenFireModal(emp)}
-              >
-                Fire
-              </button>
-            )}
-          </>
-        )}
+              <p className="text-center text-sm text-gray-600">
+                <span className="font-bold">Salary:</span> ${emp.salary}
+              </p>
 
-        {/* If the employee is fired but not HR, disable "Make HR" button */}
-        {emp.isFired && emp.role !== "HR" && (
-          <button
-            disabled
-            className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed"
-          >
-            Make HR
-          </button>
-        )}
+              <div className="mt-4 flex justify-between gap-2">
+                {emp.isFired ? (
+                  <span className="text-red-500 italic">Fired</span>
+                ) : (
+                  <>
+                    {emp.role !== "HR" && (
+                      <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                        onClick={() => handleMakeHR(emp)}
+                      >
+                        Make HR
+                      </button>
+                    )}
 
-        {/* If the employee is HR but not fired, show the "Fire" button */}
-        {emp.role === "HR" && !emp.isFired && (
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-            onClick={() => handleOpenFireModal(emp)}
-          >
-            Fire
-          </button>
-        )}
-      </div>
-    </div>
-  ))}
-</div>
+                    {emp.role !== "HR" && (
+                      <button
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                        onClick={() => handleOpenFireModal(emp)}
+                      >
+                        Fire
+                      </button>
+                    )}
+                  </>
+                )}
 
+                {emp.isFired && emp.role !== "HR" && (
+                  <button
+                    disabled
+                    className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed"
+                  >
+                    Make HR
+                  </button>
+                )}
+
+                {emp.role === "HR" && !emp.isFired && (
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                    onClick={() => handleOpenFireModal(emp)}
+                  >
+                    Fire
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
 
       {/* fire modal */}

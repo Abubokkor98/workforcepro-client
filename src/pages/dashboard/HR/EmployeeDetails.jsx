@@ -11,6 +11,7 @@ import {
 import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { Helmet } from "react-helmet-async";
 
 export default function EmployeeDetails() {
   const { email } = useParams();
@@ -31,6 +32,9 @@ export default function EmployeeDetails() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <Helmet>
+        <title>{userDetails.name} | WorkForce Pro</title>
+      </Helmet>
       <h2 className="text-2xl font-bold text-text mb-6">Employee Details</h2>
 
       <div className="flex flex-col md:flex-row items-center gap-6 bg-white shadow-md rounded-lg p-6 mb-8">

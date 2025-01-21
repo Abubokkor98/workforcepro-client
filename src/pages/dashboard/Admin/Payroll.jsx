@@ -5,6 +5,7 @@ import { useState } from "react";
 import PaymentModal from "./PaymentModal";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { Helmet } from "react-helmet-async";
 
 const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gatway_PK);
 
@@ -52,6 +53,9 @@ export default function Payroll() {
 
   return (
     <div className="container mx-auto px-4 py-6">
+       <Helmet>
+              <title>Payroll | WorkForce Pro</title>
+            </Helmet>
       <h2 className="text-2xl font-bold text-text mb-6">Employee Payroll</h2>
 
       {/* Table */}

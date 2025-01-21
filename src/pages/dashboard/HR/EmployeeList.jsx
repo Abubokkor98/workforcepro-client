@@ -166,108 +166,115 @@ export default function EmployeeList() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <Helmet>Employee List | WorkForce Pro</Helmet>
-      <h2 className="text-2xl font-bold text-text mb-4">Employee List</h2>
+    <>
+      <Helmet>
+        <title>Employees | WorkForce Pro</title>
+      </Helmet>
+      <div className="container mx-auto px-4 py-6">
+        <h2 className="text-2xl font-bold text-text mb-4">Employee List</h2>
 
-      {/*table */}
-      <div className="overflow-x-auto shadow-md rounded-lg">
-        <table className="min-w-full bg-white rounded-lg shadow-md">
-          <thead className="bg-primary text-white">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="px-6 py-3 text-left">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="border-b hover:bg-gray-100">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-6 py-3">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/*table */}
+        <div className="overflow-x-auto shadow-md rounded-lg">
+          <table className="min-w-full bg-white rounded-lg shadow-md">
+            <thead className="bg-primary text-white">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id} className="px-6 py-3 text-left">
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="border-b hover:bg-gray-100">
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-6 py-3">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* modal */}
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          contentLabel="Pay Employee"
+          className="modal bg-white rounded-lg shadow-lg p-6 w-96 mx-auto mt-20"
+          overlayClassName="modal-overlay bg-gray-500 bg-opacity-50 fixed inset-0"
+        >
+          {employeeForModal && (
+            <div>
+              <h2 className="text-xl font-bold text-text mb-4">
+                Pay {employeeForModal.name}
+              </h2>
+              <p className="mb-4">Salary: ${employeeForModal.salary}</p>
+              <form onSubmit={handleSubmit(handlePay)}>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-1"
+                    htmlFor="month"
+                  >
+                    Month
+                  </label>
+                  <select
+                    id="month"
+                    {...register("month", { required: true })}
+                    className="w-full px-3 py-2 border rounded-md"
+                  >
+                    <option value="">Select Month</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-1"
+                    htmlFor="year"
+                  >
+                    Year
+                  </label>
+                  <input
+                    id="year"
+                    type="text"
+                    {...register("year", { required: true })}
+                    className="w-full px-3 py-2 border rounded-md"
+                    placeholder="Enter Year"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-md w-full"
+                >
+                  Pay
+                </button>
+              </form>
+            </div>
+          )}
+        </Modal>
       </div>
-
-      {/* modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Pay Employee"
-        className="modal bg-white rounded-lg shadow-lg p-6 w-96 mx-auto mt-20"
-        overlayClassName="modal-overlay bg-gray-500 bg-opacity-50 fixed inset-0"
-      >
-        {employeeForModal && (
-          <div>
-            <h2 className="text-xl font-bold text-text mb-4">
-              Pay {employeeForModal.name}
-            </h2>
-            <p className="mb-4">Salary: ${employeeForModal.salary}</p>
-            <form onSubmit={handleSubmit(handlePay)}>
-              <div className="mb-4">
-                <label
-                  className="block text-sm font-medium mb-1"
-                  htmlFor="month"
-                >
-                  Month
-                </label>
-                <select
-                  id="month"
-                  {...register("month", { required: true })}
-                  className="w-full px-3 py-2 border rounded-md"
-                >
-                  <option value="">Select Month</option>
-                  <option value="January">January</option>
-                  <option value="February">February</option>
-                  <option value="March">March</option>
-                  <option value="April">April</option>
-                  <option value="May">May</option>
-                  <option value="June">June</option>
-                  <option value="July">July</option>
-                  <option value="August">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-sm font-medium mb-1"
-                  htmlFor="year"
-                >
-                  Year
-                </label>
-                <input
-                  id="year"
-                  type="text"
-                  {...register("year", { required: true })}
-                  className="w-full px-3 py-2 border rounded-md"
-                  placeholder="Enter Year"
-                />
-              </div>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-primary text-white rounded-md w-full"
-              >
-                Pay
-              </button>
-            </form>
-          </div>
-        )}
-      </Modal>
-    </div>
+    </>
   );
 }

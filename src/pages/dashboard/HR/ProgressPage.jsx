@@ -67,7 +67,9 @@ export default function ProgressPage() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <Helmet>Progress | WorkForce Pro</Helmet>
+      <Helmet>
+        <title>Progress | WorkForce Pro</title>
+      </Helmet>
       <h2 className="text-2xl font-bold text-text mb-6">Progress Records</h2>
 
       {/* filters */}
