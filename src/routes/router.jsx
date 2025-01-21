@@ -18,11 +18,13 @@ import AdminRoutes from "./AdminRoutes";
 import EmployeeRoutes from "./EmployeeRoutes";
 import HrRoutes from "./HrRoutes";
 import ContactPage from "../pages/contact/ContactPage";
+import ErrorPage from "../pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    errorElement: <ErrorPage></ErrorPage>,
     // home start here
     children: [
       {
