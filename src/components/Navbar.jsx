@@ -108,7 +108,7 @@ export default function Navbar() {
             </li>
             <li>
               <Link
-                to="/contact-us"
+                to="/contact"
                 className="text-lg px-4 py-2 text-primary font-semibold"
                 onClick={() => setMenuOpen(false)}
               >
@@ -168,7 +168,7 @@ export default function Navbar() {
           <NavLink to="/" className={getNavLinkClass}>
             Home
           </NavLink>
-          <NavLink to="/contact-us" className={getNavLinkClass}>
+          <NavLink to="/contact" className={getNavLinkClass}>
             Contact Us
           </NavLink>
           {user ? (
