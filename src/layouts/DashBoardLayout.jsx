@@ -4,7 +4,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function DashBoardLayout() {
   const [role, loading] = useRole();
-  console.log(role);
+  const { isAdmin, isHR, isEmployee } = role || {};
+  console.log({isAdmin, isHR, isEmployee});
 
   if (loading) {
     return <LoadingSpinner></LoadingSpinner>;
@@ -18,7 +19,7 @@ export default function DashBoardLayout() {
           <h2 className="text-2xl font-bold mb-6">WorkForce Pro</h2>
         </Link>
         <nav className="space-y-4">
-          {role === "Employee" && (
+          {isEmployee && (
             <>
               <NavLink
                 to="work-sheet"
@@ -43,7 +44,7 @@ export default function DashBoardLayout() {
             </>
           )}
 
-          {role === "HR" && (
+          {isHR && (
             <>
               <NavLink
                 to="employee-list"
@@ -68,7 +69,7 @@ export default function DashBoardLayout() {
             </>
           )}
 
-          {role === "Admin" && (
+          {isAdmin && (
             <>
               <NavLink
                 to="all-employees"
