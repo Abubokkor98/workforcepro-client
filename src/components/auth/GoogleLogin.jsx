@@ -26,7 +26,7 @@ export default function GoogleLogin() {
     <div className="w-full">
       <button
         onClick={handleGoogle}
-        className="w-full py-3 flex items-center justify-center bg-white border border-gray-300 rounded-lg shadow hover:shadow-lg hover:border-gray-400 transition duration-200 text-gray-800 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500"
+        className="w-full md:w-8/12 lg:w-full mx-auto py-3 flex items-center justify-center bg-white border border-gray-300 rounded-lg shadow hover:shadow-lg hover:border-gray-400 transition duration-200 text-gray-800 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700 dark:hover:border-gray-500"
       >
         <FcGoogle className="w-6 h-6 mr-2" />
         <span className="text-sm font-medium">Sign in with Google</span>

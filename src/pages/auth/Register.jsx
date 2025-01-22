@@ -48,7 +48,7 @@ export default function Register() {
         isVerified: false,
         isFired: false,
       };
-      console.log(user);
+      // console.log(user);
       const userRes = await axiosPublic.post("/users", user);
       // console.log(userRes.data);
       if (userRes.data.insertedId) {
@@ -78,7 +78,7 @@ export default function Register() {
   };
 
   return (
-    <div className=" bg-background flex items-center justify-center">
+    <div className=" bg-background flex items-center justify-center py-2">
       <Helmet>
         <title>Register | WorkForce Pro</title>
       </Helmet>
@@ -268,7 +268,7 @@ export default function Register() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-3 text-secondary"
+              className="absolute right-4 top-10 text-secondary"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
