@@ -49,7 +49,7 @@ const FeaturesOverview = () => {
         <p className="text-lg text-secondary mb-6 md:mb-12">
           Simplifying workforce management with powerful tools for every need.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ml-20 lg:ml-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
           {features.map((feature) => (
             <ReactCardFlip
               key={feature.id}
@@ -57,9 +57,8 @@ const FeaturesOverview = () => {
               flipDirection="horizontal"
             >
               {/* Front Side */}
-
               <div
-                className="flex flex-col items-center justify-center w-64 h-44 bg-primary  shadow-md rounded-lg p-6 cursor-pointer"
+                className="flex flex-col items-center justify-center w-full h-44 bg-primary shadow-md rounded-lg cursor-pointer hover:bg-accent transition-colors duration-300"
                 onClick={() => handleFlip(feature.id)}
               >
                 <span className="text-5xl mb-4 text-white">
@@ -72,7 +71,7 @@ const FeaturesOverview = () => {
 
               {/* Back Side */}
               <div
-                className="flex flex-col items-center justify-center w-64 h-44 bg-accent shadow-md rounded-lg p-6 text-white cursor-pointer"
+                className="flex flex-col items-center justify-center w-full h-44 bg-accent shadow-md rounded-lg p-6 text-white cursor-pointer"
                 onClick={() => handleFlip(feature.id)}
               >
                 <span className="text-5xl mb-4">{feature.icon}</span>
