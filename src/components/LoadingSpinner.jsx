@@ -6,10 +6,10 @@ export default function LoadingSpinner() {
       <CirclesWithBar
         height="100"
         width="100"
-        color="#4fa94d"
-        outerCircleColor="#4fa94d"
-        innerCircleColor="#4fa94d"
-        barColor="#4fa94d"
+        color="#75939e"
+        outerCircleColor="#b1aac4"
+        innerCircleColor="#a691b2"
+        barColor="#75939e"
         ariaLabel="circles-with-bar-loading"
         wrapperStyle={{}}
         wrapperClass=""
