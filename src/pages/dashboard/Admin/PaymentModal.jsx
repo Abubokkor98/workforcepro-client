@@ -73,7 +73,7 @@ export default function PaymentModal({ isOpen, onClose, employee, refetch }) {
         updatedPayment
       );
       if (res.data?.modifiedCount > 0) {
-        toast.success("Thank you for the payment");
+        toast.success(`Payment for ${name} has been successfully processed!`);
         refetch();
         onClose();
       }

@@ -101,7 +101,7 @@ export default function AllEmployeeList() {
       <Helmet>
         <title>Verified Employees | WorkForce Pro</title>
       </Helmet>
-      <h2 className="text-2xl font-bold text-text mb-6">
+      <h2 className="text-2xl font-bold text-primary mb-6">
         All Verified Employees
       </h2>
 

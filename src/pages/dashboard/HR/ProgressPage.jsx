@@ -70,7 +70,7 @@ export default function ProgressPage() {
       <Helmet>
         <title>Progress | WorkForce Pro</title>
       </Helmet>
-      <h2 className="text-2xl font-bold text-text mb-6">Progress Records</h2>
+      <h2 className="text-2xl font-bold text-primary mb-6">Progress Records</h2>
 
       {/* filters */}
       <div className="flex flex-wrap gap-4 mb-6">

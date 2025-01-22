@@ -56,7 +56,7 @@ export default function Payroll() {
        <Helmet>
               <title>Payroll | WorkForce Pro</title>
             </Helmet>
-      <h2 className="text-2xl font-bold text-text mb-6">Employee Payroll</h2>
+      <h2 className="text-2xl font-bold text-primary mb-6">Employee Payroll</h2>
 
       {/* Table */}
       <div className="overflow-x-auto">

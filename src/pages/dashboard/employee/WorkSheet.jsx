@@ -30,7 +30,7 @@ export default function WorkSheet() {
     setValue,
   } = modalForm;
 
-  // main form handler
+  //form handler
   const onSubmit = async (data) => {
     const newTask = {
       employee_name: user.displayName,
@@ -41,6 +41,7 @@ export default function WorkSheet() {
     };
     const { data: task } = await axiosSecure.post("/tasks", newTask);
     if (task.insertedId) {
+      toast.success("Task added successfully");
       reset();
       refetch();
     }
@@ -76,7 +77,7 @@ export default function WorkSheet() {
       updatedTask
     );
     if (updated.modifiedCount > 0) {
-      toast.success("Task updated successfully");
+      toast.success("Sccessfully updated");
       refetch();
       setIsModalOpen(false);
     }
@@ -91,7 +92,7 @@ export default function WorkSheet() {
       <Helmet>
         <title>Work Sheet | WorkForce Pro</title>
       </Helmet>
-      <h2 className="text-2xl font-bold mb-4">Work Sheet</h2>
+      <h2 className="text-primary text-2xl font-bold mb-4">Work Sheet</h2>
 
       {/*Form */}
       <form

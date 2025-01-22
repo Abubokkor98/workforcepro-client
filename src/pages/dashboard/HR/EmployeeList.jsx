@@ -1,24 +1,22 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import Modal from "react-modal";
 import { useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import useAxiosSecure from "../../../customHooks/useAxiosSecure";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../../../components/LoadingSpinner";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import useAxiosSecure from "../../../customHooks/useAxiosSecure";
+import PayModal from "./PayModal";
 
 export default function EmployeeList() {
   const axiosSecure = useAxiosSecure();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [employeeForModal, setEmployeeForModal] = useState(null);
-  const { register, handleSubmit, reset } = useForm();
 
   const {
     data: employeeData = [],
@@ -32,11 +30,8 @@ export default function EmployeeList() {
     },
   });
 
-  // handle verification toggle
   const handleVerified = async (user) => {
-    const updatedUser = {
-      isVerified: !user.isVerified,
-    };
+    const updatedUser = { isVerified: !user.isVerified };
     const { data: updated } = await axiosSecure.patch(
       `/users/${user._id}`,
       updatedUser
@@ -49,15 +44,7 @@ export default function EmployeeList() {
     }
   };
 
-  // Modal Handling
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setEmployeeForModal(null);
-    reset();
-  };
-
-  // handle payrequest to the admin
-  const handlePay = async (data) => {
+  const handlePayRequest = async (data) => {
     const newPayment = {
       name: employeeForModal.name,
       email: employeeForModal.email,
@@ -68,19 +55,25 @@ export default function EmployeeList() {
       transactionId: "",
       payingDate: "",
     };
-    // post payment request to the db
-    const { data: payRequest } = await axiosSecure.post(
-      "/payments",
-      newPayment
-    );
-    // console.log(payRequest);
-    if (payRequest.insertedId) {
-      toast.success("Payment request send to Admin");
+
+    try {
+      // Send payment request to the server
+      const response = await axiosSecure.post("/payments", newPayment);
+      if (response.status === 201) {
+        toast.success("Payment request sent to Admin");
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        toast.error(
+          `Payment for ${employeeForModal.name} already exists for ${data.month} ${data.year}.`
+        );
+      } else {
+        toast.error("Failed to send payment request.");
+      }
     }
-    closeModal();
   };
 
-  // Table Columns
   const columns = useMemo(
     () => [
       {
@@ -154,7 +147,7 @@ export default function EmployeeList() {
     ],
     []
   );
-  //Table Instance
+
   const table = useReactTable({
     data: employeeData,
     columns,
@@ -171,9 +164,9 @@ export default function EmployeeList() {
         <title>Employees | WorkForce Pro</title>
       </Helmet>
       <div className="container mx-auto px-4 py-6">
-        <h2 className="text-2xl font-bold text-text mb-4">Employee List</h2>
+        <h2 className="text-2xl font-bold text-primary mb-4">Employee List</h2>
 
-        {/*table */}
+        {/* Table */}
         <div className="overflow-x-auto shadow-md rounded-lg">
           <table className="min-w-full bg-white rounded-lg shadow-md">
             <thead className="bg-primary text-white">
@@ -207,73 +200,13 @@ export default function EmployeeList() {
           </table>
         </div>
 
-        {/* modal */}
-        <Modal
+        {/* PayModal */}
+        <PayModal
           isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          contentLabel="Pay Employee"
-          className="modal bg-white rounded-lg shadow-lg p-6 w-96 mx-auto mt-20"
-          overlayClassName="modal-overlay bg-gray-500 bg-opacity-50 fixed inset-0"
-        >
-          {employeeForModal && (
-            <div>
-              <h2 className="text-xl font-bold text-text mb-4">
-                Pay {employeeForModal.name}
-              </h2>
-              <p className="mb-4">Salary: ${employeeForModal.salary}</p>
-              <form onSubmit={handleSubmit(handlePay)}>
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-1"
-                    htmlFor="month"
-                  >
-                    Month
-                  </label>
-                  <select
-                    id="month"
-                    {...register("month", { required: true })}
-                    className="w-full px-3 py-2 border rounded-md"
-                  >
-                    <option value="">Select Month</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label
-                    className="block text-sm font-medium mb-1"
-                    htmlFor="year"
-                  >
-                    Year
-                  </label>
-                  <input
-                    id="year"
-                    type="text"
-                    {...register("year", { required: true })}
-                    className="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter Year"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-md w-full"
-                >
-                  Pay
-                </button>
-              </form>
-            </div>
-          )}
-        </Modal>
+          onClose={() => setIsModalOpen(false)}
+          employee={employeeForModal}
+          onPay={handlePayRequest}
+        />
       </div>
     </>
   );

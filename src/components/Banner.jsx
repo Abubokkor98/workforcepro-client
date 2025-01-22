@@ -13,7 +13,7 @@ const Banner = () => {
   };
 
   return (
-    <div className="mx-4 mt-4 lg:mx-14">
+    <div className="mx-4 mt-4 lg:mt-8 lg:mx-14">
       <div className="w-full bg-primary text-white py-16 px-8  flex flex-col lg:flex-row justify-between items-center ">
         {/* Left Side */}
         <div className="w-full lg:w-full mb-8 lg:mb-0 flex items-center lg:items-start flex-col text-center lg:text-left">

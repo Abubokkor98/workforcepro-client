@@ -64,8 +64,8 @@ export default function PaymentHistory() {
       <Helmet>
         <title>Payment History | WorkForce Pro</title>
       </Helmet>
-      <h2 className="text-2xl font-bold text-text mb-4">Payment History</h2>
-      <div className="overflow-x-auto shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold text-primary mb-4">Payment History</h2>
+      <div className="overflow-x-auto rounded-lg lg:h-80">
         <table className="min-w-full bg-white rounded-lg shadow-md">
           <thead>
             <tr className="bg-primary text-white text-left">
