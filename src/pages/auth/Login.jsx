@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { TbFidgetSpinner } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
@@ -11,7 +12,7 @@ import useAxiosPublic from "../../customHooks/useAxiosPublic";
 
 export default function Login() {
   const axiosPublic = useAxiosPublic();
-  const { loginUser, setUser } = useAuth();
+  const { loginUser, setUser, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -97,7 +98,11 @@ export default function Login() {
               type="submit"
               className="w-full py-2 bg-secondary text-white rounded-lg hover:bg-accent focus:ring-2 focus:ring-blue-400"
             >
-              Login
+              {loading ? (
+                <TbFidgetSpinner className="animate-spin m-auto" />
+              ) : (
+                "Login"
+              )}
             </button>
           </form>
         </div>

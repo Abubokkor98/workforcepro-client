@@ -1,16 +1,17 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../../provider/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { TbFidgetSpinner } from "react-icons/tb";
 import useAxiosPublic from "../../customHooks/useAxiosPublic";
+import useAuth from "../../customHooks/useAuth";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 export default function Register() {
-  const { registerUser, setUser, updateUserProfile } = useContext(AuthContext);
+  const { registerUser, setUser, updateUserProfile, loading } = useAuth();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
 
@@ -56,7 +57,7 @@ export default function Register() {
           .then((result) => {
             const user = result.user;
             setUser(user);
-            toast.success("User registered successfully");
+            toast.success("Successfully registered");
 
             updateUserProfile({
               displayName: data.name,
@@ -282,9 +283,16 @@ export default function Register() {
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition duration-200"
+            className="w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-semibold rounded-xl shadow-lg hover:opacity-90 transition duration-200 flex items-center justify-center"
           >
-            Register
+            {loading ? (
+              <>
+                <TbFidgetSpinner className="animate-spin mr-2" />
+                Creating account...
+              </>
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
 

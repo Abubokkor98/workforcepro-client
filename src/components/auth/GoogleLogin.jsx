@@ -3,19 +3,41 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../../provider/AuthProvider";
+import useAxiosPublic from "../../customHooks/useAxiosPublic";
 
 export default function GoogleLogin() {
   const { googleSignIn, setUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const handleGoogle = () => {
     googleSignIn()
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
+        // console.log(user);
         setUser(user);
-        navigate(location?.state ? location.state : "/");
-        toast.success("User login successfully.");
+
+        // save user to db
+        const userInfoForDB = {
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+          role: "Employee",
+          designation: "not set",
+          bank_account_no: parseInt(""),
+          salary: parseInt(100),
+          isVerified: false,
+          isFired: false,
+        };
+        // console.log(userInfoForDB);
+        const userRes = await axiosPublic.post("/users", userInfoForDB);
+        if (userRes.data?.insertedId) {
+          toast.success("Successfully registered");
+        } else {
+          navigate(location?.state ? location.state : "/");
+          toast.success("Login successfully.");
+        }
       })
       .catch((error) => {
         toast.error(error.message);

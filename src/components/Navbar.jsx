@@ -12,7 +12,7 @@ export default function Navbar() {
     logoutUser()
       .then(() => {
         setUser(null);
-        toast.error("User Logged out");
+        toast.error("Successfully Logged out");
         setDropdownOpen(false);
       })
       .catch((error) => {
@@ -102,7 +102,11 @@ export default function Navbar() {
           </button>
           <ul className="mt-12 space-y-4 px-6">
             <li>
-              <Link to="/" className="text-lg px-4 py-2 text-primary font-semibold" onClick={() => setMenuOpen(false)}>
+              <Link
+                to="/"
+                className="text-lg px-4 py-2 text-primary font-semibold"
+                onClick={() => setMenuOpen(false)}
+              >
                 Home
               </Link>
             </li>
