@@ -7,7 +7,7 @@ export default function useTasks() {
   const { user } = useAuth();
 
   const {
-    data: tasks = [],
+    data: tasksData = [],
     isPending: loading,
     refetch,
   } = useQuery({
@@ -20,11 +20,11 @@ export default function useTasks() {
   });
 
   // sorting tasks by date
-  const sortedTasks = tasks.sort((a, b) => {
+  const tasks = tasksData.sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
     return dateB - dateA;
   });
 
-  return [sortedTasks, loading, refetch];
+  return [tasks, loading, refetch];
 }

@@ -95,6 +95,16 @@ export default function PaymentHistory() {
                 <td className="px-6 py-3">{payment.payingDate}</td>
               </tr>
             ))}
+            {displayedPayments.length === 0 && (
+              <tr>
+                <td
+                  colSpan="5"
+                  className=" px-4 py-2 text-center text-sm text-gray-500"
+                >
+                  No records found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

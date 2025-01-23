@@ -14,7 +14,7 @@ import { Helmet } from "react-helmet-async";
 export default function WorkSheet() {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [sortedTasks, loading, refetch] = useTasks();
+  const [tasks, loading, refetch] = useTasks();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
@@ -161,7 +161,7 @@ export default function WorkSheet() {
           </tr>
         </thead>
         <tbody>
-          {sortedTasks.map((task) => (
+          {tasks.map((task) => (
             <tr
               key={task._id}
               className="odd:bg-background even:bg-accent/10 text-center"
@@ -186,6 +186,16 @@ export default function WorkSheet() {
               </td>
             </tr>
           ))}
+          {tasks.length === 0 && (
+            <tr>
+              <td
+                colSpan="4"
+                className="border border-gray-300 px-4 py-2 text-center text-sm text-gray-500"
+              >
+                No records found.
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 
