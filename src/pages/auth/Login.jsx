@@ -7,30 +7,47 @@ import Lottie from "lottie-react";
 import loginAnimation from "../../assets/login.json";
 import GoogleLogin from "../../components/auth/GoogleLogin";
 import useAuth from "../../customHooks/useAuth";
+import useAxiosPublic from "../../customHooks/useAxiosPublic";
 
 export default function Login() {
+  const axiosPublic = useAxiosPublic();
   const { loginUser, setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const handleLogin = (e) => {
+  // login
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form = new FormData(e.target);
     const email = form.get("email");
     const password = form.get("password");
 
-    loginUser(email, password)
-      .then((result) => {
-        const user = result.user;
-        setUser(user);
-        navigate(from, { replace: true });
-        toast.success("Login successfully");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+    try {
+      // Call the API to check if the user is fired
+      const { data: userStatus } = await axiosPublic.get(
+        `/users/fired-status?email=${email}`
+      );
+
+      if (userStatus.isFired) {
+        toast.error("Your account is disabled. Please contact support.");
+        return;
+      }
+      // if user is good
+      loginUser(email, password)
+        .then((result) => {
+          const user = result.user;
+          setUser(user);
+          navigate(from, { replace: true });
+          toast.success("Successfully Login");
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
+    } catch (error) {
+      toast.error("Acount not found");
+    }
   };
 
   return (
