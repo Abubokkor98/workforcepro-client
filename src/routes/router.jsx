@@ -12,7 +12,6 @@ import EmployeeDetails from "../pages/dashboard/HR/EmployeeDetails";
 import ProgressPage from "../pages/dashboard/HR/ProgressPage";
 import AllEmployeeList from "../pages/dashboard/Admin/AllEmployeeList";
 import Payroll from "../pages/dashboard/Admin/Payroll";
-import DashBoard from "../test/DashBoard";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoutes from "./AdminRoutes";
 import EmployeeRoutes from "./EmployeeRoutes";
@@ -72,7 +71,6 @@ const router = createBrowserRouter([
             <EmployeeList></EmployeeList>
           </HrRoutes>
         ),
-        // element: <DashBoard></DashBoard>
       },
       {
         path: "employee-details/:email",

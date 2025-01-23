@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Zoom } from "react-awesome-reveal";
 import ReactCardFlip from "react-card-flip";
 import { FaChartLine, FaLock, FaPlug, FaSyncAlt } from "react-icons/fa";
 
@@ -50,35 +51,37 @@ const FeaturesOverview = () => {
           Simplifying workforce management with powerful tools for every need.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
-          {features.map((feature) => (
-            <ReactCardFlip
-              key={feature.id}
-              isFlipped={flippedCards[feature.id] || false}
-              flipDirection="horizontal"
-            >
-              {/* Front Side */}
-              <div
-                className="flex flex-col items-center justify-center w-full h-44 bg-primary shadow-md rounded-lg cursor-pointer hover:bg-accent transition-colors duration-300"
-                onClick={() => handleFlip(feature.id)}
+          <Zoom cascade damping={0.1}>
+            {features.map((feature) => (
+              <ReactCardFlip
+                key={feature.id}
+                isFlipped={flippedCards[feature.id] || false}
+                flipDirection="horizontal"
               >
-                <span className="text-5xl mb-4 text-white">
-                  {feature.icon1}
-                </span>
-                <h3 className="text-xl font-semibold text-white">
-                  {feature.title}
-                </h3>
-              </div>
+                {/* Front Side */}
+                <div
+                  className="flex flex-col items-center justify-center w-full h-44 bg-primary shadow-md rounded-lg cursor-pointer hover:bg-accent transition-colors duration-300"
+                  onClick={() => handleFlip(feature.id)}
+                >
+                  <span className="text-5xl mb-4 text-white">
+                    {feature.icon1}
+                  </span>
+                  <h3 className="text-xl font-semibold text-white">
+                    {feature.title}
+                  </h3>
+                </div>
 
-              {/* Back Side */}
-              <div
-                className="flex flex-col items-center justify-center w-full h-44 bg-accent shadow-md rounded-lg p-6 text-white cursor-pointer"
-                onClick={() => handleFlip(feature.id)}
-              >
-                <span className="text-5xl mb-4">{feature.icon}</span>
-                <p className="text-lg">{feature.description}</p>
-              </div>
-            </ReactCardFlip>
-          ))}
+                {/* Back Side */}
+                <div
+                  className="flex flex-col items-center justify-center w-full h-44 bg-accent shadow-md rounded-lg p-6 text-white cursor-pointer"
+                  onClick={() => handleFlip(feature.id)}
+                >
+                  <span className="text-5xl mb-4">{feature.icon}</span>
+                  <p className="text-lg">{feature.description}</p>
+                </div>
+              </ReactCardFlip>
+            ))}
+          </Zoom>
         </div>
       </div>
     </section>
