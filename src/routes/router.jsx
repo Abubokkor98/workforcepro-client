@@ -18,6 +18,7 @@ import EmployeeRoutes from "./EmployeeRoutes";
 import HrRoutes from "./HrRoutes";
 import ContactPage from "../pages/contact/ContactPage";
 import ErrorPage from "../pages/ErrorPage";
+import Inquiries from "../pages/dashboard/Admin/Inquiries";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoutes>
             <Payroll></Payroll>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "inquiries",
+        element: (
+          <AdminRoutes>
+            <Inquiries></Inquiries>
           </AdminRoutes>
         ),
       },

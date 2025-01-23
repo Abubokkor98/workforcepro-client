@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import useAxiosPublic from "../customHooks/useAxiosPublic";
 
 const ContactUs = () => {
-  const [formData, setFormData] = useState({ email: "", message: "" });
+  const axiosPublic = useAxiosPublic();
   const [status, setStatus] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("Message sent successfully!");
-    setTimeout(() => setStatus(""), 3000);
-    setFormData({ email: "", message: "" });
+    const form = new FormData(e.target);
+    const email = form.get("email");
+    const message = form.get("message");
+    const newMessage = {
+      email: email,
+      message: message,
+    };
+    const { data } = await axiosPublic.post("/messages", newMessage);
+
+    if (data.insertedId) {
+      setStatus("message send successfully");
+      setTimeout(() => setStatus(""), 3000);
+    } else {
+      setStatus("message failed");
+      setTimeout(() => setStatus(""), 3000);
+    }
+    e.target.reset();
   };
 
   return (
@@ -67,8 +77,6 @@ const ContactUs = () => {
                     type="email"
                     id="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-accent focus:outline-none"
                     placeholder="Enter your email"
@@ -85,8 +93,6 @@ const ContactUs = () => {
                     id="message"
                     name="message"
                     rows="5"
-                    value={formData.message}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-accent focus:outline-none"
                     placeholder="Type your message"

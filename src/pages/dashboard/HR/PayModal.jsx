@@ -7,9 +7,9 @@ export default function PayModal({ isOpen, onClose, employee, onPay }) {
   const { register, handleSubmit, reset } = useForm();
 
   const handlePay = (data) => {
-    onPay(data); // Call the `onPay` function passed from the parent
-    reset(); // Reset the form
-    onClose(); // Close the modal
+    onPay(data);
+    reset(); 
+    onClose(); 
   };
   return (
     <Modal

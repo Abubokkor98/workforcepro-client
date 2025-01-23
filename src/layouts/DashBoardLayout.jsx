@@ -13,6 +13,7 @@ import {
 import useRole from "../customHooks/useRole";
 import LoadingSpinner from "../components/LoadingSpinner";
 import useAuth from "../customHooks/useAuth";
+import {FaRegMessage } from "react-icons/fa6";
 
 export default function DashBoardLayout() {
   const { user } = useAuth();
@@ -103,6 +104,17 @@ export default function DashBoardLayout() {
           >
             <FaMoneyCheckAlt className="text-xl" />
             Payroll
+          </NavLink>
+          <NavLink
+            to="inquiries"
+            className={({ isActive }) =>
+              `flex items-center gap-3 py-2 px-4 rounded ${
+                isActive ? "bg-secondary" : "hover:bg-secondary"
+              }`
+            }
+          >
+            <FaRegMessage className="text-xl" />
+            Inquiries
           </NavLink>
         </>
       )}
