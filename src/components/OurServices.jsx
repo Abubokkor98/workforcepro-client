@@ -82,7 +82,6 @@ export default function OurServices() {
   return (
     <section className="bg-background  py-16">
       <div className="mx-4 lg:mx-14 text-center">
-        {/* Section Heading */}
         <motion.h2
           className="text-primary md:w-10/12 lg:w-6/12 mx-auto text-3xl md:text-4xl font-bold mb-6"
           initial={{ opacity: 0, y: -50 }}
@@ -113,7 +112,7 @@ export default function OurServices() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{
                 duration: 0.6,
-                delay: index * 0.2, // Add a stagger effect for each card
+                delay: index * 0.2,
               }}
             >
               <div className="text-5xl text-white mb-4">{service.icon}</div>

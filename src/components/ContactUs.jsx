@@ -43,7 +43,7 @@ const ContactUs = () => {
         <div className="max-w-4xl w-full bg-white rounded-b-lg shadow-lg">
           {/* Content */}
           <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Address Section */}
+            {/* Address */}
             <div className="p-6 md:border-r border-gray-300">
               <div className="space-y-4">
                 <div className="flex items-start space-x-2">
@@ -63,7 +63,7 @@ const ContactUs = () => {
               </div>
             </div>
 
-            {/* Contact Form Section */}
+            {/* Contact Form */}
             <div className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

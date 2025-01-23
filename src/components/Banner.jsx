@@ -29,7 +29,7 @@ const Banner = () => {
           </button>
         </div>
 
-        {/* Right Side - Lottie Animation */}
+        {/* Right Side */}
         <div className="w-full lg:w-1/2 flex justify-center">
           <Lottie options={lottieOptions} height={300} width={300} />
         </div>

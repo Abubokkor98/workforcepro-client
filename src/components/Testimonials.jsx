@@ -57,7 +57,6 @@ export default function Testimonials() {
   return (
     <section className="py-16 mx-4 lg:mx-14">
       <div className=" shadow-md py-4">
-        {/* Heading */}
         <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6 text-center">
         Trusted by Professionals
         </h2>

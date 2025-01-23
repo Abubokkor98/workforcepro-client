@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import useAxiosPublic from "../../customHooks/useAxiosPublic";
-import toast from "react-hot-toast";
 import { useState } from "react";
 
 const ContactPage = () => {
@@ -34,7 +33,6 @@ const ContactPage = () => {
       <Helmet>
         <title>Contact | WorkForce Pro</title>
       </Helmet>
-      {/* Section Header */}
       <div className="text-center max-w-4xl w-full mx-auto bg-white pt-4 rounded-t-lg">
         <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6">
           Let’s Start a Conversation
@@ -48,7 +46,7 @@ const ContactPage = () => {
         <div className="max-w-4xl w-full bg-white rounded-b-lg shadow-lg">
           {/* Content */}
           <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Address Section */}
+            {/* Address */}
             <div className="p-6 md:border-r border-gray-300">
               <div className="space-y-4">
                 <div className="flex items-start space-x-2">
@@ -68,7 +66,7 @@ const ContactPage = () => {
               </div>
             </div>
 
-            {/* Contact Form Section */}
+            {/* Contact form */}
             <div className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

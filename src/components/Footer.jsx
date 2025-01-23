@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="bg-primary text-background py-12">
       <div className="mx-4 lg:mx-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Column 1: Logo and Description */}
+          {/* Column 1 */}
           <div>
             <h1 className="text-2xl font-bold mb-4">WorkForce Pro</h1>
             <p className="text-secondary text-sm">
@@ -83,7 +83,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 4: Contact Information */}
+          {/* Column 4 */}
           <div>
             <h2 className="text-lg font-semibold mb-4">Contact Us</h2>
             <ul className="space-y-2 text-sm">

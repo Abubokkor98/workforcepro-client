@@ -26,7 +26,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     // const { name, email, password, photo } = data;
 
     // upload image to the image bb and get an URL

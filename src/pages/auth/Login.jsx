@@ -57,7 +57,7 @@ export default function Login() {
         <title>Login | WorkForce Pro</title>
       </Helmet>
       <div className="flex flex-col lg:flex-row shadow-lg rounded-lg bg-white max-w-4xl w-full">
-        {/* Left Section */}
+        {/* Left */}
         <div className="p-8 lg:w-1/2 flex flex-col justify-center items-center">
           <h2 className="text-3xl font-bold mb-4 text-primary">
             Welcome Back!
@@ -107,7 +107,7 @@ export default function Login() {
           </form>
         </div>
 
-        {/* Right Section */}
+        {/* Right Side*/}
         <div className="bg-secondary text-white p-8 lg:w-1/2 flex flex-col justify-center items-center rounded-lg h-80 lg:h-96">
           <Lottie animationData={loginAnimation} className="w-3/4 h-48 mb-6" />
           <GoogleLogin />
