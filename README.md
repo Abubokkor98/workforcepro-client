@@ -144,4 +144,6 @@ Built with 💻 and passion by **Abu Bokkor Siddik**.
 
 ### **🌟 Why WorkForce Pro?**
 
-- **Secure & Scalable:** Designed for businesses of all sizes with enterprise-level security. -**User-Friendly:** Simple yet powerful tools for day-to-day operations. -**Global Reach:** Built for businesses aiming to scale internationally.
+- **Secure & Scalable:** Designed for businesses of all sizes with enterprise-level security.
+- **User-Friendly:** Simple yet powerful tools for day-to-day operations.
+- **Global Reach:** Built for businesses aiming to scale internationally.
