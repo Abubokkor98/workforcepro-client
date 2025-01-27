@@ -224,22 +224,26 @@ export default function Register() {
           </div>
 
           {/* Salary */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Salary</span>
-            </label>
-            <input
-              type="number"
-              placeholder="Enter your salary"
-              className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
-              {...register("salary", { required: "Salary is required" })}
-            />
-            {errors.salary && (
-              <span className="text-red-500 text-sm mt-2">
-                {errors.salary.message}
-              </span>
-            )}
-          </div>
+<div className="form-control">
+  <label className="label">
+    <span className="label-text">Salary</span>
+  </label>
+  <input
+    type="number"
+    placeholder="Enter your salary"
+    className="w-full px-4 py-3 border border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary bg-background text-text placeholder-gray-400"
+    {...register("salary", {
+      required: "Salary is required",
+      validate: value => value >= 100 || "Salary must be 100 or more"
+    })}
+  />
+  {errors.salary && (
+    <span className="text-red-500 text-sm mt-2">
+      {errors.salary.message}
+    </span>
+  )}
+</div>
+
 
           {/* Password */}
           <div className="relative form-control">

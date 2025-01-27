@@ -65,7 +65,7 @@ export default function PaymentModal({ isOpen, onClose, employee, refetch }) {
         paymentStatus: "paid",
         transactionId: paymentIntent.id,
         payingDate: currentDate,
-        status: "pending",
+        // status: "pending",
       };
 
       const res = await axiosSecure.patch(

@@ -1,16 +1,30 @@
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+
 // Set the app element for React Modal
 Modal.setAppElement("#root");
 
 export default function PayModal({ isOpen, onClose, employee, onPay }) {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const handlePay = (data) => {
     onPay(data);
-    reset(); 
-    onClose(); 
+    reset();
+    onClose();
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -32,23 +46,34 @@ export default function PayModal({ isOpen, onClose, employee, onPay }) {
               </label>
               <select
                 id="month"
-                {...register("month", { required: true })}
+                {...register("month", { required: "Month is required" })}
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Month</option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
+                {[
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December",
+                ].map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
               </select>
+              {errors.month && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.month.message}
+                </span>
+              )}
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1" htmlFor="year">
@@ -56,15 +81,25 @@ export default function PayModal({ isOpen, onClose, employee, onPay }) {
               </label>
               <input
                 id="year"
-                type="text"
-                {...register("year", { required: true })}
+                type="number"
+                {...register("year", {
+                  required: "Year is required",
+                })}
+                onKeyDown={(e) => {
+                  if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
+                }}
                 className="w-full px-3 py-2 border rounded-md"
                 placeholder="Enter Year"
               />
+              {errors.year && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.year.message}
+                </span>
+              )}
             </div>
             <button
               type="submit"
-              className="px-4 py-2 bg-primary text-white rounded-md w-full"
+              className="px-4 py-2 bg-primary text-white rounded-md w-full hover:bg-primary-dark active:scale-95"
             >
               Pay
             </button>
