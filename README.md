@@ -43,7 +43,7 @@ Whether you're an HR manager or a business owner, **WorkForce Pro** simplifies c
    Fast and secure communication between frontend and backend for seamless data management.
 
 9. **💼 Responsive Design**  
-    Optimized for desktop, tablet, and mobile devices to ensure usability across all platforms.
+   Optimized for desktop, tablet, and mobile devices to ensure usability across all platforms.
 
 10. **📂 File Uploads & Document Management**  
     Manage employee records by uploading and storing essential files directly on the platform.
@@ -107,15 +107,68 @@ Use the following credentials to access the admin dashboard:
 
 ---
 
-### **👥 Contribution Guidelines**
+## Installation and Setup 🚀
 
-We welcome contributions to enhance **WorkForce Pro**!
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/Abubokkor98/career-compass.git
+    ```
+2.  Navigate to the project directory:
+    ```bash
+    cd career-compass
+    ```
+3.  Install dependencies:
+    ```bash
+    npm install
+    ```
+4.  Set up Firebase:
 
-1. Fork the repository.
-2. Clone the repo:
-   ```bash
-   git clone https://github.com/Abubokkor98/workforcepro.git
-   ```
+    - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/).
+    - Enable Authentication and configure the desired sign-in methods.
+    - Copy the Firebase configuration and create a `.env` file in the root directory.
+    - Add the following variables:
+      ```plaintext
+      REACT_APP_FIREBASE_API_KEY=your-firebase-api-key
+      REACT_APP_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
+      REACT_APP_FIREBASE_PROJECT_ID=your-firebase-project-id
+      REACT_APP_FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
+      REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-firebase-messaging-sender-id
+      REACT_APP_FIREBASE_APP_ID=your-firebase-app-id
+
+      VITE_IMAGE_HOSTING_KEY=your_image_hosting_key
+      VITE_Payment_Gateway_PK=your_payment_gateway_public_key
+      VITE_API_URL=your_backend_api_url
+``` 
+5. Start the development server:
+
+```bash
+npm start
+```
+
+6. Access the application at `http://localhost:5173`.
+
+## 📦 Dependencies  
+WorkForce Pro relies on the following key dependencies:
+
+### **Frontend Libraries**  
+- **react, react-dom** – Core React framework.  
+- **react-router-dom** – Navigation and routing.  
+- **framer-motion** – Smooth animations.  
+- **swiper** – Interactive carousels.  
+
+### **State Management & Data Fetching**  
+- **@tanstack/react-query** – Efficient data fetching.  
+- **axios** – API requests handling.  
+
+### **UI Components & Utilities**  
+- **react-datepicker** – Date selection.  
+- **recharts** – Data visualization.  
+- **moment & date-fns** – Date manipulation.  
+
+### **Authentication & Notifications**  
+- **firebase** – Secure user authentication.  
+- **react-hot-toast** – User notifications.  
+
 
 ### **👥 Contribution Guidelines**
 
