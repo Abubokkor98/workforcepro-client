@@ -86,26 +86,6 @@ Use the following credentials to access the admin dashboard:
 5. **Payroll Processing**: Pay employees securely using Stripe integration.
 6. **Insights & Analytics**: Monitor performance and revenue trends with advanced charts.
 
----
-
-### **💡 Future Roadmap**
-
-1. **📊 AI-Driven Insights**  
-   Predict workforce trends and optimize task distribution with AI-powered analytics.
-
-2. **📱 Mobile Application**  
-   Extend accessibility with a dedicated Android and iOS app.
-
-3. **🌍 Multi-Language Support**  
-   Expand usability with multi-language features for global audiences.
-
-4. **📅 Calendar Integration**  
-   Integrate with external calendars (e.g., Google Calendar) for better task scheduling.
-
-5. **🛠️ Customizable Roles & Permissions**  
-   Add flexible role configurations to suit diverse organizational structures.
-
----
 
 ## Installation and Setup 🚀
 
@@ -185,6 +165,25 @@ We welcome contributions to enhance **WorkForce Pro**!
    ```
 4. Make your changes and test them.
 5. Submit a pull request to the main branch.
+
+---
+
+### **💡 Future Roadmap**
+
+1. **📊 AI-Driven Insights**  
+   Predict workforce trends and optimize task distribution with AI-powered analytics.
+
+2. **📱 Mobile Application**  
+   Extend accessibility with a dedicated Android and iOS app.
+
+3. **🌍 Multi-Language Support**  
+   Expand usability with multi-language features for global audiences.
+
+4. **📅 Calendar Integration**  
+   Integrate with external calendars (e.g., Google Calendar) for better task scheduling.
+
+5. **🛠️ Customizable Roles & Permissions**  
+   Add flexible role configurations to suit diverse organizational structures.
 
 ---
 
