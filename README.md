@@ -86,6 +86,7 @@ Use the following credentials to access the admin dashboard:
 5. **Payroll Processing**: Pay employees securely using Stripe integration.
 6. **Insights & Analytics**: Monitor performance and revenue trends with advanced charts.
 
+---
 
 ## Installation and Setup 🚀
 
@@ -126,6 +127,8 @@ npm start
 
 6. Access the application at `http://localhost:5173`.
 
+---
+
 ## 📦 Dependencies  
 WorkForce Pro relies on the following key dependencies:
 
@@ -148,6 +151,7 @@ WorkForce Pro relies on the following key dependencies:
 - **firebase** – Secure user authentication.  
 - **react-hot-toast** – User notifications.  
 
+---
 
 ### **👥 Contribution Guidelines**
 
