@@ -107,15 +107,40 @@ Use the following credentials to access the admin dashboard:
 
 ---
 
-### **👥 Contribution Guidelines**
+## 🏃‍♂️ Running the Project Locally  
 
-We welcome contributions to enhance **WorkForce Pro**!
+Follow these steps to set up and run **WorkForce Pro** on your local machine:  
 
-1. Fork the repository.
-2. Clone the repo:
-   ```bash
-   git clone https://github.com/Abubokkor98/workforcepro.git
-   ```
+### 1️⃣ **Clone the Repository**  
+
+Open your terminal and run:  
+
+```sh
+git clone https://github.com/your-username/workforce-pro.git
+cd workforce-pro
+### 2️⃣ **Install Dependencies**
+Ensure you have Node.js and npm installed. Then, install project dependencies:
+npm install
+### 3️⃣ **Set Up Environment Variables**
+Create a .env file in the project root and add the following (replace with actual values):
+VITE_apiKey=your_firebase_api_key
+VITE_authDomain=your_firebase_auth_domain
+VITE_projectId=your_firebase_project_id
+VITE_storageBucket=your_firebase_storage_bucket
+VITE_messagingSenderId=your_firebase_messaging_sender_id
+VITE_appId=your_firebase_app_id
+
+VITE_IMAGE_HOSTING_KEY=your_image_hosting_key
+VITE_Payment_Gateway_PK=your_payment_gateway_public_key
+
+VITE_API_URL=your_backend_api_url
+
+### 4️⃣ **Start the Development Server**
+Run the project locally with:
+npm run dev
+
+The app should now be running on:
+👉 http://localhost:5173/ (default Vite port)
 
 ### **👥 Contribution Guidelines**
 
