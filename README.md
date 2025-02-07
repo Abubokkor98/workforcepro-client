@@ -121,7 +121,6 @@ Use the following credentials to access the admin dashboard:
 ``` 
 5. Start the development server:
 
-```bash
 npm start
 ```
 
