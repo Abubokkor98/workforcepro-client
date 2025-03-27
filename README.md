@@ -195,7 +195,7 @@ We welcome contributions to enhance **WorkForce Pro**!
 Built with 💻 and passion by **Abu Bokkor Siddik**.
 
 - **GitHub**: [Abubokkor98](https://github.com/Abubokkor98)
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/abubokkor)
+- **LinkedIn**: [LinkedIn](https://www.linkedin.com/in/abubokkor)
 
 ### **🌟 Why WorkForce Pro?**
 
